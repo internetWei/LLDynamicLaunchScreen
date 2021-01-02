@@ -3,7 +3,8 @@ LLDynamicLaunchScreen
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 Solve abnormal issues such as blank iOS startup map, and support dynamic replacement of startup map.
-Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)
+Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
+[中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
 特性
 ==============
@@ -13,7 +14,7 @@ Chinese mainland users can access[This link](https://gitee.com/internetWei/lldyn
 
 Demo
 ==============
-![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo.gif)
+![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo.gif)
 
 Usage
 ==============
