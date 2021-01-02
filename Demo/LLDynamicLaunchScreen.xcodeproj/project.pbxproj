@@ -83,8 +83,8 @@
 		6A405F5625A07EC5007EA6D4 /* LLDynamicLaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6A405F5725A07EC5007EA6D4 /* LLDynamicLaunchScreen.m */,
 				6A405F5825A07EC5007EA6D4 /* LLDynamicLaunchScreen.h */,
+				6A405F5725A07EC5007EA6D4 /* LLDynamicLaunchScreen.m */,
 			);
 			name = LLDynamicLaunchScreen;
 			path = ../../LLDynamicLaunchScreen;
