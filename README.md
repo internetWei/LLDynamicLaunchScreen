@@ -14,7 +14,7 @@ Chinese mainland users can access[This link](https://gitee.com/internetWei/lldyn
 
 Demo
 ==============
-![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo.gif)
+![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo.gif)
 
 Usage
 ==============
