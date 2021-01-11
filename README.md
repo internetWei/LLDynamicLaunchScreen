@@ -6,7 +6,7 @@ Solve abnormal issues such as blank iOS startup map, and support dynamic replace
 Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
-特性
+Features
 ==============
 - Simple to use, only 1 line of code is needed to modify the startup diagram.
 - Powerful function, supports dynamic modification of any type of startup diagram.
@@ -14,7 +14,7 @@ Chinese mainland users can access[This link](https://gitee.com/internetWei/lldyn
 
 Demo
 ==============
-![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo.gif)
+![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo.gif)
 
 Usage
 ==============
