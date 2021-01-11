@@ -39,10 +39,9 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 安装
 ==============
 ### CocoaPods
-1. 将 cocoapods 更新至最新版本。
-2. 在 Podfile 中添加 pod 'LLDynamicLaunchScreen'。
-3. 执行 pod install 或 pod update。
-4. 导入 <LLDynamicLaunchScreen/LLDynamicLaunchScreen.h>。
+1. 在 Podfile 中添加 pod 'LLDynamicLaunchScreen'。
+2. 执行 pod install --repo-update。
+3. 导入 <LLDynamicLaunchScreen/LLDynamicLaunchScreen.h>。
 
 ### 手动安装
 1. 下载 LLDark 文件夹内的所有内容。
