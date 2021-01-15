@@ -48,6 +48,38 @@ static inline UIWindow * currentWindow(void) {
 
 @implementation LLDynamicLaunchScreen
 
++ (void)load {
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didFinishLaunching) name:UIApplicationDidFinishLaunchingNotification object:nil];
+}
+
++ (void)didFinishLaunching {
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *old_app_version = [NSUserDefaults.standardUserDefaults objectForKey:@"ll_launchImage_app_version"];
+    
+    [self initialization];
+    
+    if (![old_app_version isEqualToString:app_version]) {
+        // 修改启动图为上个版本更新的启动图
+        NSString *originReplacePath = [self originReplaceImagePath];
+
+        NSDictionary *suffixDictionary = @{
+            @(LLLaunchImageTypeVerticalLight) : verticalLightName,
+            @(LLLaunchImageTypeVerticalDark) : verticalDarkName,
+            @(LLLaunchImageTypeHorizontalLight) : horizontalLightName,
+            @(LLLaunchImageTypeHorizontalDark) : horizontalDarkName,
+        };
+        for (NSNumber *key in suffixDictionary) {
+            NSString *value = [suffixDictionary objectForKey:key];
+            NSString *fullPath = [[originReplacePath stringByAppendingPathComponent:value] stringByAppendingString:@".png"];
+            if ([NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
+                UIImage *replaceImage = [UIImage imageWithContentsOfFile:fullPath];
+                [self replaceLaunchImage:replaceImage type:key.integerValue compressionQuality:0.8 customValidation:nil];
+            }
+        }
+    }
+}
+
 + (void)restoreAsBefore {
     [self initialization];
     
@@ -86,6 +118,9 @@ static inline UIWindow * currentWindow(void) {
     if ([fileManager fileExistsAtPath:tmpDir]) {
         [fileManager removeItemAtPath:tmpDir error:nil];
     }
+
+    // 删除替换源图文件夹
+    [fileManager removeItemAtPath:[self originReplaceImagePath] error:nil];
 }
 
 + (void)replaceVerticalLaunchImage:(UIImage *)verticalImage {
@@ -174,6 +209,26 @@ static inline UIWindow * currentWindow(void) {
     if ([fileManager fileExistsAtPath:tmpDir]) {
         [fileManager removeItemAtPath:tmpDir error:nil];
     }
+    
+    // 将替换源图单独保存
+    NSString *originReplacePath = [self originReplaceImagePath];
+    NSString *originReplaceSuffix = nil;
+    switch (type) {
+        case LLLaunchImageTypeVerticalLight:
+            originReplaceSuffix = verticalLightName;
+            break;
+        case LLLaunchImageTypeVerticalDark:
+            originReplaceSuffix = verticalDarkName;
+            break;
+        case LLLaunchImageTypeHorizontalLight:
+            originReplaceSuffix = horizontalLightName;
+            break;
+        case LLLaunchImageTypeHorizontalDark:
+            originReplaceSuffix = horizontalDarkName;
+            break;
+    }
+    NSString *originReplaceFullPath = [[originReplacePath stringByAppendingPathComponent:originReplaceSuffix] stringByAppendingString:@".png"];
+    [data writeToFile:originReplaceFullPath atomically:YES];
     
     return YES;
 }
@@ -362,6 +417,16 @@ static inline UIWindow * currentWindow(void) {
 + (NSString *)launchImageBackupPath {
     NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
     NSString *fullPath = [rootPath stringByAppendingPathComponent:@"ll_launchImage_backup"];
+    if (![NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
+        [NSFileManager.defaultManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:@{} error:nil];
+    }
+    return fullPath;
+}
+
+/// 替换启动图源图保存路径
++ (NSString *)originReplaceImagePath {
+    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *fullPath = [rootPath stringByAppendingPathComponent:@"ll_originReplace_launchImage_backup"];
     if (![NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
         [NSFileManager.defaultManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:@{} error:nil];
     }
