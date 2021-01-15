@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.1-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 解决iOS启动图空白等异常问题，并且支持动态更换启动图。
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
@@ -44,8 +44,8 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 3. 导入 <LLDynamicLaunchScreen/LLDynamicLaunchScreen.h>。
 
 ### 手动安装
-1. 下载 LLDark 文件夹内的所有内容。
-2. 将LLDark文件夹添加(拖放)到你的工程。
+1. 下载 LLDynamicLaunchScreen 文件夹内的所有内容。
+2. 将LLDynamicLaunchScreen文件夹添加(拖放)到你的工程。
 3. 导入 "LLDynamicLaunchScreen.h"。
 
 系统要求
@@ -55,6 +55,7 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 注意点
 ==============
 * 替换图片尺寸建议和屏幕尺寸保持一致。
+* APP更新版本后，第一次打开APP会显示默认启动图。这是系统限制，暂时没办法解决。
 
 联系作者
 ==============
@@ -66,4 +67,4 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 
 许可证
 ==============
-LLDark 使用 MIT 许可证，详情见 LICENSE 文件。
+LLDynamicLaunchScreen 使用 MIT 许可证，详情见 LICENSE 文件。
