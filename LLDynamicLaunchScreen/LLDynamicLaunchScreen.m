@@ -1,507 +1,355 @@
 //
 //  LLDynamicLaunchScreen.m
-//  LLLaunchScreen
+//  LLDynamicLaunchScreen
 //
-//  Created by LL on 2020/12/28.
+//  Created by LL on 2021/1/18.
 //
 
 #import "LLDynamicLaunchScreen.h"
 
+#import <objc/runtime.h>
 
 @interface UIImage (LLDynamicLaunchScreen)
 
-/// YES：是深色系图片，NO：是浅色系图片
 @property (nonatomic, readonly) BOOL hasDarkImage;
 
-/// 检查图片大小
-@property (nonatomic, readonly) BOOL checkSize;
-
-/// 获取图片上某个点的RGB值(不包含alpha)。
+/// 获取图片上某个点的RGB(不包含alpha)。
 - (nullable NSArray<NSNumber *> *)pixelColorFromPoint:(CGPoint)point;
 
-+ (UIImage *)resizeImage:(UIImage *)image toPortraitScreenSize:(BOOL)isPortrait;
+- (UIImage *)resizeImageWithDirection:(BOOL)vertical;
+
+/// 根据竖屏状态、暗黑状态从launchScreen.storyboard创建并返回启动图
++ (UIImage *)createLaunchimageFromSnapshotStoryboardWithisPortrait:(BOOL)isPortrait isDark:(BOOL)isDark;
 
 @end
 
-/// 竖屏浅色启动图名称
-static NSString * const verticalLightName = @"verticalLight";
 
-/// 竖屏深色启动图名称
-static NSString * const verticalDarkName = @"verticalDark";
 
-/// 横屏浅色启动图名称
-static NSString * const horizontalLightName = @"horizontalLight";
+static NSString * const launchImageInfoIdentifier = @"launchImageInfoIdentifier";
+static NSString * const launchImageModifyIdentifier = @"launchImageModifyIdentifier";
+static NSString * const launchImageVersionIdentifier = @"launchImageVersionIdentifier";
 
-/// 横屏深色启动图名称
-static NSString * const horizontalDarkName = @"horizontalDark";
-
-static NSString * const nameMapppingIdentifier = @"ll_launchImage_nameMapppingIdentifier";
-
-/// 获取APP的主要Window
-static inline UIWindow * currentWindow(void) {
-    if (@available(iOS 13.0, *)) {
-        return UIApplication.sharedApplication.windows.firstObject;
-    } else {
-        return UIApplication.sharedApplication.keyWindow;
-    }
-}
+static BOOL launchImage_repairException = NO;
+static BOOL launchImage_restoreAsBefore = NO;
 
 @implementation LLDynamicLaunchScreen
 
-+ (void)load {
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didFinishLaunching) name:UIApplicationDidFinishLaunchingNotification object:nil];
-}
-
 + (void)didFinishLaunching {
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *app_version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    NSString *old_app_version = [NSUserDefaults.standardUserDefaults objectForKey:@"ll_launchImage_app_version"];
-    
-    [self initialization];
-    
-    if (![old_app_version isEqualToString:app_version]) {
-        // 修改启动图为上个版本更新的启动图
-        NSString *originReplacePath = [self originReplaceImagePath];
-
-        NSDictionary *suffixDictionary = @{
-            @(LLLaunchImageTypeVerticalLight) : verticalLightName,
-            @(LLLaunchImageTypeVerticalDark) : verticalDarkName,
-            @(LLLaunchImageTypeHorizontalLight) : horizontalLightName,
-            @(LLLaunchImageTypeHorizontalDark) : horizontalDarkName,
-        };
-        for (NSNumber *key in suffixDictionary) {
-            NSString *value = [suffixDictionary objectForKey:key];
-            NSString *fullPath = [[originReplacePath stringByAppendingPathComponent:value] stringByAppendingString:@".png"];
-            if ([NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
-                UIImage *replaceImage = [UIImage imageWithContentsOfFile:fullPath];
-                [self replaceLaunchImage:replaceImage type:key.integerValue compressionQuality:0.8 customValidation:nil];
+    [self launchImageIsNewVersion:^{
+        NSDictionary *modifyDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier];
+        for (NSString *key in modifyDictionary) {
+            NSString *isModify = modifyDictionary[key];
+            if ([isModify isEqualToString:@"YES"]) {
+                NSString *fullPath = [customLaunchImageBackupPath() stringByAppendingPathComponent:[key stringByAppendingString:@".png"]];
+                [self replaceLaunchImage:[UIImage imageWithContentsOfFile:fullPath] launchImageType:LaunchImageTypeFromLaunchImageName(key) compressionQuality:0.8 validation:nil];
             }
         }
+    } identifier:NSStringFromSelector(@selector(didFinishLaunching))];
+}
+
++ (void)initialize {
+    NSMutableDictionary *modifyDictionary = [[NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier] mutableCopy];
+    if (modifyDictionary == nil) {
+        modifyDictionary = [NSMutableDictionary dictionary];
+        [modifyDictionary setObject:@"NO" forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
+        [modifyDictionary setObject:@"NO" forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
+        if (@available(iOS 13.0, *)) {
+            [modifyDictionary setObject:@"NO" forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark)];
+            [modifyDictionary setObject:@"NO" forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark)];
+        }
+        [NSUserDefaults.standardUserDefaults setObject:modifyDictionary.copy forKey:launchImageModifyIdentifier];
+    }
+    
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *app_version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *old_app_version = [NSUserDefaults.standardUserDefaults objectForKey:@"launchImage_app_version_identifier"];
+    
+    if ([app_version isEqualToString:old_app_version] == NO) {
+        NSMutableDictionary *versionDictionary = [[NSUserDefaults.standardUserDefaults objectForKey:launchImageVersionIdentifier] mutableCopy];
+        if (versionDictionary == nil) versionDictionary = [NSMutableDictionary dictionary];
+        
+        [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(didFinishLaunching))];
+        [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(initialization))];
+        [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(backupSystemLaunchImage))];
+        
+        [NSUserDefaults.standardUserDefaults setObject:versionDictionary.copy forKey:launchImageVersionIdentifier];
+        
+        [NSUserDefaults.standardUserDefaults setObject:app_version forKey:@"launchImage_app_version_identifier"];
+    }
+    
+    [self initialization];
+}
+
++ (void)initialization {
+    [self launchImageIsNewVersion:^{
+        [self launchImageCustomBlock:^(NSString *tmpDirectory) {
+            
+            // 记录启动图信息
+            NSMutableDictionary *infoDictionary = [NSMutableDictionary dictionary];
+            for (NSString *name in [NSFileManager.defaultManager contentsOfDirectoryAtPath:tmpDirectory error:nil]) {
+                if ([self isSnapShotSuffix:name] == NO) continue;
+                
+                UIImage *tmpImage = [UIImage imageWithContentsOfFile:[tmpDirectory stringByAppendingPathComponent:name]];
+                if (@available(iOS 13.0, *)) {
+                    BOOL hasDarkImage = LLDynamicLaunchScreen.hasDarkImageBlock(tmpImage);
+                    
+                    if (tmpImage.size.width < tmpImage.size.height) {
+                        if (hasDarkImage) {// 竖屏深色启动图
+                            [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark)];
+                        } else {// 竖屏浅色启动图
+                            [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
+                        }
+                    } else {
+                        if (hasDarkImage) {// 横屏深色启动图
+                            [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark)];
+                        } else {// 横屏浅色启动图
+                            [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
+                        }
+                    }
+                } else {
+                    if (tmpImage.size.width < tmpImage.size.height) {// 竖屏浅色启动图
+                        [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
+                    } else {// 横屏浅色启动图
+                        [infoDictionary setObject:name forKey:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
+                    }
+                }
+                
+            }
+            
+            [NSUserDefaults.standardUserDefaults setObject:infoDictionary.copy forKey:launchImageInfoIdentifier];
+        }];
+    } identifier:NSStringFromSelector(@selector(initialization))];
+}
+
++ (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage {
+    [self replaceLaunchImage:verticalImage launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
+    if (@available(iOS 13.0, *)) {
+        [self replaceLaunchImage:verticalImage launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
+    }
+}
+
++ (void)replaceHorizontalLaunchImage:(nullable UIImage *)horizontalImage {
+    [self replaceLaunchImage:horizontalImage launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
+    if (@available(iOS 13.0, *)) {
+        [self replaceLaunchImage:horizontalImage launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
+    }
+}
+
++ (void)repairException {
+    if (doesExistsOriginLaunchImage()) {
+        NSDictionary *modifyDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier];
+        for (NSString *key in modifyDictionary) {
+            NSString *isModify = modifyDictionary[key];
+            if ([isModify isEqualToString:@"NO"]) {
+                [self replaceLaunchImage:nil launchImageType:LaunchImageTypeFromLaunchImageName(key) compressionQuality:0.8 validation:nil];
+            }
+        }
+        
+        launchImage_repairException = NO;
+    } else {
+        launchImage_repairException = YES;
     }
 }
 
 + (void)restoreAsBefore {
-    [self initialization];
-    
-    // 获取系统缓存启动图路径
-    NSString *cacheDir = [self launchImageCacheDirectory];
-    if (!cacheDir) return;
-    
-    // 工作目录
-    NSString *cachesParentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *tmpDir = [cachesParentDir stringByAppendingPathComponent:@"ll_launchImageCachesTmp"];
-    
-    // 清理工作目录
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
+    if (doesExistsOriginLaunchImage()) {
+        [self replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
+        [self replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
+        if (@available(iOS 13.0, *)) {
+            [self replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
+            [self replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
+        }
+        
+        [NSFileManager.defaultManager removeItemAtPath:customLaunchImageBackupPath() error:nil];
+        launchImage_restoreAsBefore = NO;
+    } else {
+        launchImage_restoreAsBefore = YES;
     }
-    
-    // 移动系统缓存目录内容至工作目录
-    BOOL moveResult = [fileManager moveItemAtPath:cacheDir toPath:tmpDir error:nil];
-    if (!moveResult) return;
-    
-    NSString *localPath = [self launchImageBackupPath];
-    NSDictionary *nameMapping = [NSUserDefaults.standardUserDefaults objectForKey:nameMapppingIdentifier];
-    for (NSString *name in [NSFileManager.defaultManager contentsOfDirectoryAtPath:localPath error:nil]) {
-        NSString *imageName = [name stringByDeletingPathExtension];
-        // 获取系统的启动图完整名称
-        NSString *realName = [nameMapping objectForKey:imageName];
-        NSData *replaceData = [NSData dataWithContentsOfFile:[localPath stringByAppendingPathComponent:name]];
-        [replaceData writeToFile:[tmpDir stringByAppendingPathComponent:realName] atomically:YES];
-    }
-    
-    // 还原系统缓存目录
-    moveResult = [fileManager moveItemAtPath:tmpDir toPath:cacheDir error:nil];
-    
-    // 清理工作目录
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
-    }
-
-    // 删除替换源图文件夹
-    [fileManager removeItemAtPath:[self originReplaceImagePath] error:nil];
 }
 
-+ (void)replaceVerticalLaunchImage:(UIImage *)verticalImage {
-    // 替换竖屏启动图
-    [self replaceLaunchImage:verticalImage type:LLLaunchImageTypeVerticalLight compressionQuality:0.8 customValidation:nil];
-    [self replaceLaunchImage:verticalImage type:LLLaunchImageTypeVerticalDark compressionQuality:0.8 customValidation:nil];
-}
-
-+ (void)replaceHorizontalLaunchImage:(UIImage *)horizontalImage {
-    // 替换横屏启动图
-    [self replaceLaunchImage:horizontalImage type:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 customValidation:nil];
-    [self replaceLaunchImage:horizontalImage type:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 customValidation:nil];
-}
-
-+ (BOOL)replaceLaunchImage:(UIImage *)replaceImage type:(LLLaunchImageType)type compressionQuality:(CGFloat)quality customValidation:(BOOL (^ _Nullable) (UIImage *originImage, UIImage *replaceImage))validationBlock {
-    if (!replaceImage) return NO;
++ (BOOL)replaceLaunchImage:(nullable UIImage *)replaceImage
+           launchImageType:(LLLaunchImageType)launchImageType
+        compressionQuality:(CGFloat)quality
+                validation:(BOOL (^ _Nullable) (UIImage *originImage, UIImage *replaceImage))validationBlock {
+    BOOL isReplace = (replaceImage != nil);
+    
+    if (replaceImage == nil) {
+        NSString *imageName = LaunchImageNameFromLaunchImageType(launchImageType);
+        NSString *fullPath = [originLaunchImageFullBackupPath() stringByAppendingPathComponent:[imageName stringByAppendingString:@".png"]];
+        replaceImage = [UIImage imageWithContentsOfFile:fullPath];
+    }
     
     BOOL isVertical = NO;
-    if (type == LLLaunchImageTypeVerticalLight ||
-        type == LLLaunchImageTypeVerticalDark) {
+    if (launchImageType == LLLaunchImageTypeVerticalLight) {
         isVertical = YES;
     }
     
-    replaceImage = [UIImage resizeImage:replaceImage toPortraitScreenSize:isVertical];
-    
-    // 转为jpeg
-    NSData *data = UIImageJPEGRepresentation(replaceImage, quality);
-    if (!data) return NO;
-    
-    [self initialization];
-    
-    // 检查图片尺寸是否等同屏幕分辨率
-    if (!replaceImage.checkSize) return NO;
-    
-    // 获取系统缓存启动图路径
-    NSString *cacheDir = [self launchImageCacheDirectory];
-    if (!cacheDir) return NO;
-    
-    // 工作目录
-    NSString *cachesParentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *tmpDir = [cachesParentDir stringByAppendingPathComponent:@"ll_launchImageCachesTmp"];
-    
-    // 清理工作目录
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
-    }
-    
-    // 移动系统缓存目录内容至工作目录
-    BOOL moveResult = [fileManager moveItemAtPath:cacheDir toPath:tmpDir error:nil];
-    if (!moveResult) return NO;
-    
-    NSDictionary *nameMapping = [NSUserDefaults.standardUserDefaults objectForKey:nameMapppingIdentifier];
-    NSString *realName = nil;
-    // 替换指定启动图
-    switch (type) {
-        case LLLaunchImageTypeVerticalLight:
-            realName = [nameMapping objectForKey:verticalLightName];
-            break;
-        case LLLaunchImageTypeVerticalDark:
-            realName = [nameMapping objectForKey:verticalDarkName];
-            break;
-        case LLLaunchImageTypeHorizontalLight:
-            realName = [nameMapping objectForKey:horizontalLightName];
-            break;
-        case LLLaunchImageTypeHorizontalDark:
-            realName = [nameMapping objectForKey:horizontalDarkName];
-            break;
-    }
-    
-    NSString *fullPath = [tmpDir stringByAppendingPathComponent:realName];
-    UIImage *originImage = [UIImage imageWithContentsOfFile:fullPath];
-    if (validationBlock) {
-        BOOL result = validationBlock(originImage, replaceImage);
-        if (result) {
-            [data writeToFile:fullPath atomically:YES];
+    if (@available(iOS 13.0, *)) {
+        if (launchImageType == LLLaunchImageTypeVerticalDark) {
+            isVertical = YES;
         }
+    }
+    
+    /// 调整图片大小与启动图一致
+    replaceImage = [replaceImage resizeImageWithDirection:isVertical];
+    
+    NSData *replaceImageData = UIImageJPEGRepresentation(replaceImage, quality);
+    if (!replaceImageData) return NO;
+    
+    // 替换启动图
+    BOOL __block result = [self launchImageCustomBlock:^(NSString *tmpDirectory) {
+        NSString *imageName = LaunchImageNameFromLaunchImageType(launchImageType);
+        NSDictionary *launchImageInfo = [NSUserDefaults.standardUserDefaults objectForKey:launchImageInfoIdentifier];
+        imageName = [launchImageInfo objectForKey:imageName];
+        
+        if (imageName == nil) result = NO;
+        
+        NSString *fullPath = [tmpDirectory stringByAppendingPathComponent:imageName];
+        UIImage *originImage = [UIImage imageWithContentsOfFile:fullPath];
+        
+        BOOL result = !validationBlock ? YES : validationBlock(originImage, replaceImage);
+        if (result == YES) {
+            [replaceImageData writeToFile:fullPath atomically:YES];
+        }
+    }];
+    
+    if (result == NO) return NO;
+    
+    // 备份replaceImage
+    NSString *customLaunchImageFullPath = [customLaunchImageBackupPath() stringByAppendingPathComponent:[LaunchImageNameFromLaunchImageType(launchImageType) stringByAppendingString:@".png"]];
+    if (isReplace) {
+        [replaceImageData writeToFile:customLaunchImageFullPath atomically:YES];
     } else {
-        [data writeToFile:fullPath atomically:YES];
+        [NSFileManager.defaultManager removeItemAtPath:customLaunchImageFullPath error:nil];
     }
     
-    // 还原系统缓存目录
-    moveResult = [fileManager moveItemAtPath:tmpDir toPath:cacheDir error:nil];
-
-    // 清理工作目录
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
-    }
-    
-    // 将替换源图单独保存
-    NSString *originReplacePath = [self originReplaceImagePath];
-    NSString *originReplaceSuffix = nil;
-    switch (type) {
-        case LLLaunchImageTypeVerticalLight:
-            originReplaceSuffix = verticalLightName;
-            break;
-        case LLLaunchImageTypeVerticalDark:
-            originReplaceSuffix = verticalDarkName;
-            break;
-        case LLLaunchImageTypeHorizontalLight:
-            originReplaceSuffix = horizontalLightName;
-            break;
-        case LLLaunchImageTypeHorizontalDark:
-            originReplaceSuffix = horizontalDarkName;
-            break;
-    }
-    NSString *originReplaceFullPath = [[originReplacePath stringByAppendingPathComponent:originReplaceSuffix] stringByAppendingString:@".png"];
-    [data writeToFile:originReplaceFullPath atomically:YES];
+    // 记录启动图修改记录
+    NSMutableDictionary *modifyDictionary = [[NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier] mutableCopy];
+    [modifyDictionary setObject:isReplace ? @"YES" : @"NO" forKey:LaunchImageNameFromLaunchImageType(launchImageType)];
+    [NSUserDefaults.standardUserDefaults setObject:modifyDictionary.copy forKey:launchImageModifyIdentifier];
     
     return YES;
 }
 
-+ (void)initialization {
-    NSString *localPath = [self launchImageBackupPath];
-    
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-    NSString *app_version = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    NSString *old_app_version = [NSUserDefaults.standardUserDefaults objectForKey:@"ll_launchImage_app_version"];
-    
-    // 判断是否需要重新初始化启动图资源
-    if ([app_version isEqualToString:old_app_version] &&
-        ![self isEmptyDir:localPath]) return;
-    
-    // 清空本地启动图
-    for (NSString *name in [NSFileManager.defaultManager contentsOfDirectoryAtPath:localPath error:nil]) {
-        NSString *fullPath = [localPath stringByAppendingPathComponent:name];
-        [NSFileManager.defaultManager removeItemAtPath:fullPath error:nil];
-    }
-    
-    UIWindow *window = currentWindow();
-    NSInteger interfaceStyle = 0;
-    if (@available(iOS 13.0, *)) {
-        // 保存APP当前的主题模式
-        interfaceStyle = window.overrideUserInterfaceStyle;
-    }
-    
-    NSString *launchScreenName = @"LaunchScreen";
-    if (LLDynamicLaunchScreen.launchScreenName.length > 0) {
-        launchScreenName = LLDynamicLaunchScreen.launchScreenName;
-    }
-    
-    /*-------1.生成启动图资源-------*/
-    UIImage *verticalLight = [self snapshotStoryboard:launchScreenName isPortrait:YES isDark:NO];
-    UIImage *verticalDark = nil;
-    if (@available(iOS 13.0, *)) {
-        verticalDark = [self snapshotStoryboard:launchScreenName isPortrait:YES isDark:YES];
-    }
-    
-    UIImage *horizontalLight = nil;
-    UIImage *horizontalDark = nil;
-    if ([self supportHorizontalScreen]) {
-        horizontalLight = [self snapshotStoryboard:launchScreenName isPortrait:NO isDark:NO];
-        if (@available(iOS 13.0, *)) {
-            horizontalDark = [self snapshotStoryboard:launchScreenName isPortrait:NO isDark:YES];
++ (void)backupSystemLaunchImage {
+    [self launchImageIsNewVersion:^{
+        NSString *backupPath = originLaunchImageFullBackupPath();
+        
+        // 1.删除原始启动图备份文件
+        for (NSString *name in [NSFileManager.defaultManager contentsOfDirectoryAtPath:backupPath error:nil]) {
+            NSString *fullPath = [backupPath stringByAppendingPathComponent:name];
+            [NSFileManager.defaultManager removeItemAtPath:fullPath error:nil];
         }
-    }
-    
-    // 恢复APP主题模式
-    if (@available(iOS 13.0, *)) {
-        window.overrideUserInterfaceStyle = interfaceStyle;
-    }
-    
-    // 本地启动图路径
-    NSString *verticalLightPath = [localPath stringByAppendingPathComponent:[verticalLightName stringByAppendingString:@".png"]];
-    NSString *verticalDarkPath = [localPath stringByAppendingPathComponent:[verticalDarkName stringByAppendingString:@".png"]];
-    NSString *horizontalLightPath = [localPath stringByAppendingPathComponent:[horizontalLightName stringByAppendingString:@".png"]];
-    NSString *horizontalDarkPath = [localPath stringByAppendingPathComponent:[horizontalDarkName stringByAppendingString:@".png"]];
-
-    // 将生成的启动图保存到本地
-    if (verticalLight) {
-        [UIImageJPEGRepresentation(verticalLight, 0.8) writeToFile:verticalLightPath atomically:YES];
-    }
-    if (verticalDark) {
-        [UIImageJPEGRepresentation(verticalDark, 0.8) writeToFile:verticalDarkPath atomically:YES];
-    }
-    if (horizontalLight) {
-        [UIImageJPEGRepresentation(horizontalLight, 0.8) writeToFile:horizontalLightPath atomically:YES];
-    }
-    if (horizontalDark) {
-        [UIImageJPEGRepresentation(horizontalDark, 0.8) writeToFile:horizontalDarkPath atomically:YES];
-    }
-    
-    // 保存APP当前版本号信息
-    [NSUserDefaults.standardUserDefaults setObject:app_version forKey:@"ll_launchImage_app_version"];
-    
-    [self createLaunchImageNameMapping];
-}
-
-/// 生成启动图名称映射表
-+ (void)createLaunchImageNameMapping {
-    NSMutableDictionary *nameMappping = [NSMutableDictionary dictionary];
-    
-    // 获取系统缓存启动图路径
-    NSString *cacheDir = [self launchImageCacheDirectory];
-    if (!cacheDir) return;
-    
-    // 工作目录
-    NSString *cachesParentDir = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *tmpDir = [cachesParentDir stringByAppendingPathComponent:@"ll_launchImageCachesTmp"];
-    
-    // 清理工作目录
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
-    }
-    
-    // 移动系统缓存目录内容至工作目录
-    BOOL moveResult = [fileManager moveItemAtPath:cacheDir toPath:tmpDir error:nil];
-    if (!moveResult) return;
-    
-    // 遍历记录需要操作的图片名
-    for (NSString *name in [fileManager contentsOfDirectoryAtPath:tmpDir error:nil]) {
-        if ([self isSnapShotName:name]) {
-            UIImage *tmpImage = [UIImage imageWithContentsOfFile:[tmpDir stringByAppendingPathComponent:name]];
+        
+        // 2.生成APP的启动图对象
+        UIImage *verticalLightImage, *verticalDarkImage, *horizontalLightImage, *horizontalDarkImage;
+        if (@available(iOS 13.0, *)) {
+            verticalDarkImage = [UIImage createLaunchimageFromSnapshotStoryboardWithisPortrait:YES isDark:YES];
+        }
+        verticalLightImage = [UIImage createLaunchimageFromSnapshotStoryboardWithisPortrait:YES isDark:NO];
+        
+        if (supportHorizontalScreen()) {
+            horizontalLightImage = [UIImage createLaunchimageFromSnapshotStoryboardWithisPortrait:NO isDark:NO];
             if (@available(iOS 13.0, *)) {
-                // 判断是横图还是竖图
-                if (tmpImage.size.width < tmpImage.size.height) {// 竖图
-                    if (_hasDarkImageBlock) {// 用户实现了自定义深色图片校验
-                        BOOL hasDark = _hasDarkImageBlock(tmpImage);
-                        if (hasDark) {
-                            [nameMappping setObject:name forKey:verticalDarkName];
-                        } else {
-                            [nameMappping setObject:name forKey:verticalLightName];
-                        }
-                    } else {
-                        if (tmpImage.hasDarkImage) {// 深色竖图
-                            [nameMappping setObject:name forKey:verticalDarkName];
-                        } else {// 浅色竖图
-                            [nameMappping setObject:name forKey:verticalLightName];
-                        }
-                    }
-                } else {// 横图
-                    if (_hasDarkImageBlock) {
-                        BOOL hasDark = _hasDarkImageBlock(tmpImage);
-                        if (hasDark) {
-                            [nameMappping setObject:name forKey:horizontalDarkName];
-                        } else {
-                            [nameMappping setObject:name forKey:horizontalLightName];
-                        }
-                    } else {
-                        if (tmpImage.hasDarkImage) {// 深色横图
-                            [nameMappping setObject:name forKey:horizontalDarkName];
-                        } else {// 浅色横图
-                            [nameMappping setObject:name forKey:horizontalLightName];
-                        }
-                    }
-                }
-            } else {
-                if (tmpImage.size.width < tmpImage.size.height) {// 竖图
-                    [nameMappping setObject:name forKey:verticalLightName];
-                    [nameMappping setObject:name forKey:verticalDarkName];
-                } else {
-                    [nameMappping setObject:name forKey:horizontalLightName];
-                    [nameMappping setObject:name forKey:horizontalDarkName];
-                }
+                horizontalDarkImage = [UIImage createLaunchimageFromSnapshotStoryboardWithisPortrait:NO isDark:YES];
             }
         }
-    }
+        
+        // 本地启动图路径
+        NSString *verticalLightPath = [backupPath stringByAppendingPathComponent:[LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight) stringByAppendingString:@".png"]];
+        NSString *horizontalLightPath = [backupPath stringByAppendingPathComponent:[LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight) stringByAppendingString:@".png"]];
+        NSString *verticalDarkPath, *horizontalDarkPath;
+        if (@available(iOS 13.0, *)) {
+            verticalDarkPath = [backupPath stringByAppendingPathComponent:[LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark) stringByAppendingString:@".png"]];
+            horizontalDarkPath = [backupPath stringByAppendingPathComponent:[LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark) stringByAppendingString:@".png"]];
+        }
+        
+        // 3.将启动图保存到备份文件夹
+        if (verticalLightImage) {
+            [UIImageJPEGRepresentation(verticalLightImage, 0.8) writeToFile:verticalLightPath atomically:YES];
+        }
+        if (verticalDarkImage) {
+            [UIImageJPEGRepresentation(verticalDarkImage, 0.8) writeToFile:verticalDarkPath atomically:YES];
+        }
+        if (horizontalLightImage) {
+            [UIImageJPEGRepresentation(horizontalLightImage, 0.8) writeToFile:horizontalLightPath atomically:YES];
+        }
+        if (horizontalDarkImage) {
+            [UIImageJPEGRepresentation(horizontalDarkImage, 0.8) writeToFile:horizontalDarkPath atomically:YES];
+        }
+        
+        if (launchImage_repairException == YES) {
+            [self repairException];
+        }
+        
+        if (launchImage_restoreAsBefore == YES) {
+            [self restoreAsBefore];
+        }
+    } identifier:NSStringFromSelector(@selector(backupSystemLaunchImage))];
+}
+
++ (BOOL)launchImageCustomBlock:(void (^) (NSString *tmpDirectory))complete {
+    /// 获取系统启动图路径
+    NSString *systemDirectory = systemLaunchImagePath();
+    if (!systemDirectory) return NO;
     
-    // 还原系统缓存目录
-    moveResult = [fileManager moveItemAtPath:tmpDir toPath:cacheDir error:nil];
+    // 工作目录
+    NSString *tmpDirectory = ({
+        NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        NSString *tmpDirectory = [rootPath stringByAppendingPathComponent:@"LLDynamicLaunchScreen_tmp"];
+        tmpDirectory;
+    });
     
     // 清理工作目录
-    if ([fileManager fileExistsAtPath:tmpDir]) {
-        [fileManager removeItemAtPath:tmpDir error:nil];
-    }
-    
-    [NSUserDefaults.standardUserDefaults setObject:nameMappping forKey:nameMapppingIdentifier];
-}
-
-/// 系统启动图缓存路径
-+ (nullable NSString *)launchImageCacheDirectory {
-    NSString *bundleID = [NSBundle mainBundle].infoDictionary[@"CFBundleIdentifier"];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-
-    // iOS13之前
-    NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *snapshotsPath = [[cachesDirectory stringByAppendingPathComponent:@"Snapshots"] stringByAppendingPathComponent:bundleID];
-    if ([fileManager fileExistsAtPath:snapshotsPath]) {
-        return snapshotsPath;
+    if ([fileManager fileExistsAtPath:tmpDirectory]) {
+        [fileManager removeItemAtPath:tmpDirectory error:nil];
     }
     
-    // iOS13
-    NSString *libraryDirectory = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
-    snapshotsPath = [NSString stringWithFormat:@"%@/SplashBoard/Snapshots/%@ - {DEFAULT GROUP}", libraryDirectory, bundleID];
-    if ([fileManager fileExistsAtPath:snapshotsPath]) {
-        return snapshotsPath;
+    // 移动系统启动图文件夹至工作目录
+    BOOL moveResult = [fileManager moveItemAtPath:systemDirectory toPath:tmpDirectory error:nil];
+    if (!moveResult) return NO;
+    
+    !complete ?: complete(tmpDirectory);
+    
+    // 还原系统启动图信息
+    moveResult = [fileManager moveItemAtPath:tmpDirectory toPath:systemDirectory error:nil];
+    
+    // 清理工作目录
+    if ([fileManager fileExistsAtPath:tmpDirectory]) {
+        [fileManager removeItemAtPath:tmpDirectory error:nil];
     }
     
-    return nil;
-}
-
-/// 启动图备份文件夹
-+ (NSString *)launchImageBackupPath {
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *fullPath = [rootPath stringByAppendingPathComponent:@"ll_launchImage_backup"];
-    if (![NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
-        [NSFileManager.defaultManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:@{} error:nil];
-    }
-    return fullPath;
-}
-
-/// 替换启动图源图保存路径
-+ (NSString *)originReplaceImagePath {
-    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
-    NSString *fullPath = [rootPath stringByAppendingPathComponent:@"ll_originReplace_launchImage_backup"];
-    if (![NSFileManager.defaultManager fileExistsAtPath:fullPath]) {
-        [NSFileManager.defaultManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:@{} error:nil];
-    }
-    return fullPath;
-}
-
-+ (BOOL)isEmptyDir:(NSString *)path {
-    for (NSString *name in [NSFileManager.defaultManager contentsOfDirectoryAtPath:path error:nil]) {
-        if ([self isSnapShotName:name]) {
-            return NO;
-        }
-    }
     return YES;
 }
 
-/// 系统缓存启动图后缀名
-+ (BOOL)isSnapShotName:(NSString *)name {
+/// 根据标识符判断是否是新版本
++ (void)launchImageIsNewVersion:(void (^) (void))complete identifier:(NSString *)identifier {
+#ifdef DEBUG
+    !complete ?: complete();
+#else
+    NSMutableDictionary *versionDictionary = [[NSUserDefaults.standardUserDefaults objectForKey:launchImageVersionIdentifier] mutableCopy];
+    
+    NSString *isNewVersion = [versionDictionary objectForKey:identifier];
+    
+    if ([isNewVersion isEqualToString:@"YES"]) {
+        !complete ?: complete();
+        [versionDictionary setObject:@"NO" forKey:identifier];
+        [NSUserDefaults.standardUserDefaults setObject:versionDictionary.copy forKey:launchImageVersionIdentifier];
+    }
+#endif
+}
+
+/// 判断是不是启动图后缀
++ (BOOL)isSnapShotSuffix:(NSString *)name {
     // 新系统后缀
-    if ([name hasSuffix:@".ktx"]) {
-        return YES;
-    }
+    if ([name hasSuffix:@".ktx"]) return YES;
     // 老系统后缀
-    if ([name hasSuffix:@".png"]) {
-        return YES;
-    }
+    if ([name hasSuffix:@".png"]) return YES;
     return NO;
 }
 
-static NSString *_launchScreenName;
-+ (void)setLaunchScreenName:(NSString *)launchScreenName {
-    _launchScreenName = launchScreenName;
-}
-
-+ (NSString *)launchScreenName {
-    return _launchScreenName;
-}
-
-/// 根据LaunchScreen名称、是否竖屏、是否暗黑3个参数生成启动图。
-+ (UIImage *)snapshotStoryboard:(NSString *)sbName isPortrait:(BOOL)isPortrait isDark:(BOOL)isDark {
-    if (@available(iOS 13.0, *)) {
-        UIWindow *window = currentWindow();
-        if (isDark) {
-            window.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
-        } else {
-            window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
-        }
-    }
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:sbName bundle:nil];
-    UIViewController *vc = storyboard.instantiateInitialViewController;
-    vc.view.frame = [UIScreen mainScreen].bounds;
-    
-    if (isPortrait) {
-        if (vc.view.frame.size.width > vc.view.frame.size.height) {
-            vc.view.frame = CGRectMake(0, 0, vc.view.frame.size.height, vc.view.frame.size.width);
-        }
-    } else {
-        if (vc.view.frame.size.width < vc.view.frame.size.height) {
-            vc.view.frame = CGRectMake(0, 0, vc.view.frame.size.height, vc.view.frame.size.width);
-        }
-    }
-    
-    [vc.view setNeedsLayout];
-    [vc.view layoutIfNeeded];
-    
-    UIGraphicsBeginImageContextWithOptions(vc.view.frame.size, NO, [UIScreen mainScreen].scale);
-    [vc.view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
-/// YES：APP支持横屏，NO：不支持
-+ (BOOL)supportHorizontalScreen {
+BOOL supportHorizontalScreen(void) {
     NSArray *t_array = [NSBundle.mainBundle.infoDictionary objectForKey:@"UISupportedInterfaceOrientations"];
     if ([t_array containsObject:@"UIInterfaceOrientationLandscapeLeft"] ||
         [t_array containsObject:@"UIInterfaceOrientationLandscapeRight"]) {
@@ -511,21 +359,115 @@ static NSString *_launchScreenName;
     }
 }
 
-static BOOL (^_hasDarkImageBlock) (UIImage *image);
-+ (void)setHasDarkImageBlock:(BOOL (^)(UIImage * _Nonnull))hasDarkImageBlock {
-    _hasDarkImageBlock = hasDarkImageBlock;
+NSString * launchScreenName(void) {
+    static NSString *launchScreenName;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSDictionary *info = NSBundle.mainBundle.infoDictionary;
+        launchScreenName = [info objectForKey:@"UILaunchStoryboardName"];
+    });
+    return launchScreenName;
+}
+
+NSString * LaunchImageNameFromLaunchImageType(LLLaunchImageType launchImageType) {
+    switch (launchImageType) {
+        case LLLaunchImageTypeVerticalLight:
+            return @"LLLaunchImageTypeVerticalLight";
+        case LLLaunchImageTypeVerticalDark:
+            return @"LLLaunchImageTypeVerticalDark";
+        case LLLaunchImageTypeHorizontalLight:
+            return @"LLLaunchImageTypeHorizontalLight";
+        case LLLaunchImageTypeHorizontalDark:
+            return @"LLLaunchImageTypeHorizontalDark";
+    }
+}
+
+LLLaunchImageType LaunchImageTypeFromLaunchImageName(NSString *launchImageName) {
+    if ([launchImageName isEqualToString:@"LLLaunchImageTypeVerticalDark"]) {
+        if (@available(iOS 13.0, *)) {
+            return LLLaunchImageTypeVerticalDark;
+        } else {
+            return LLLaunchImageTypeVerticalLight;
+        }
+    }
+    
+    if ([launchImageName isEqualToString:@"LLLaunchImageTypeHorizontalLight"]) {
+        return LLLaunchImageTypeHorizontalLight;
+    }
+    
+    if ([launchImageName isEqualToString:@"LLLaunchImageTypeHorizontalDark"]) {
+        if (@available(iOS 13.0, *)) {
+            return LLLaunchImageTypeHorizontalDark;
+        } else {
+            return LLLaunchImageTypeHorizontalLight;
+        }
+    } else {
+        return LLLaunchImageTypeVerticalLight;
+    }
 }
 
 + (BOOL (^)(UIImage * _Nonnull))hasDarkImageBlock {
-    return _hasDarkImageBlock;
+    static BOOL (^hasDarkImageBlock) (UIImage *) = ^(UIImage *image) {
+        return image.hasDarkImage;
+    };
+    return hasDarkImageBlock;
+}
+
++ (void)setHasDarkImageBlock:(BOOL (^)(UIImage * _Nonnull))hasDarkImageBlock {
+    if (hasDarkImageBlock) {
+        LLDynamicLaunchScreen.hasDarkImageBlock = hasDarkImageBlock;
+    }
+}
+
+BOOL doesExistsOriginLaunchImage(void) {
+    for (NSString *obj in [NSFileManager.defaultManager contentsOfDirectoryAtPath:originLaunchImageFullBackupPath() error:nil]) {
+        if ([LLDynamicLaunchScreen isSnapShotSuffix:obj] == YES) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+NSString * systemLaunchImagePath(void) {
+    NSString *bundleID = [NSBundle mainBundle].infoDictionary[@"CFBundleIdentifier"];
+
+    NSString *snapshotsPath;
+    if (@available(iOS 13.0, *)) {
+        NSString *libraryDirectory = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+        snapshotsPath = [NSString stringWithFormat:@"%@/SplashBoard/Snapshots/%@ - {DEFAULT GROUP}", libraryDirectory, bundleID];
+    } else {
+        NSString *cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        snapshotsPath = [[cachesDirectory stringByAppendingPathComponent:@"Snapshots"] stringByAppendingPathComponent:bundleID];
+    }
+    
+    if ([NSFileManager.defaultManager fileExistsAtPath:snapshotsPath]) return snapshotsPath;
+    
+    return nil;
+}
+
+NSString * customLaunchImageBackupPath(void) {
+    return (id)[LLDynamicLaunchScreen createFolder:@"custom_launchImage_backup_rootpath"];
+}
+
+NSString * originLaunchImageFullBackupPath(void) {
+    return (id)[LLDynamicLaunchScreen createFolder:@"origin_launchImage_backup_rootpath"];
+}
+
++ (NSString *)createFolder:(NSString *)folderName {
+    NSString *rootPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"LLDynamicLaunchScreen"];
+    NSString *fullPath = [rootPath stringByAppendingPathComponent:folderName];
+    if ([NSFileManager.defaultManager fileExistsAtPath:fullPath] == NO) {
+        [NSFileManager.defaultManager createDirectoryAtPath:fullPath withIntermediateDirectories:YES attributes:@{} error:nil];
+    }
+    return fullPath;
 }
 
 @end
 
 
+
 @implementation UIImage (LLDynamicLaunchScreen)
 
-/// 获取图片上某个点的颜色值(不包含alpha)。
 - (nullable NSArray<NSNumber *> *)pixelColorFromPoint:(CGPoint)point {
     // 判断点是否超出图像范围
     if (!CGRectContainsPoint(CGRectMake(0, 0, self.size.width, self.size.height), point)) return nil;
@@ -583,7 +525,26 @@ static BOOL (^_hasDarkImageBlock) (UIImage *image);
     return YES;
 }
 
-+ (CGSize)contextSizeForPortrait:(BOOL)isPortrait {
+- (UIImage *)resizeImageWithDirection:(BOOL)vertical {
+    CGSize imageSize = CGSizeApplyAffineTransform(self.size,
+                                                  CGAffineTransformMakeScale(self.scale, self.scale));
+    CGSize contextSize = [self contextSizeForPortrait:vertical];
+    
+    if (!CGSizeEqualToSize(imageSize, contextSize)) {
+        UIGraphicsBeginImageContext(contextSize);
+        CGFloat ratio = MAX((contextSize.width / self.size.width),
+                            (contextSize.height / self.size.height));
+        CGRect rect = CGRectMake(0, 0, self.size.width * ratio, self.size.height * ratio);
+        [self drawInRect:rect];
+        UIImage* resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return resizedImage;
+    }
+    
+    return self;
+}
+
+- (CGSize)contextSizeForPortrait:(BOOL)isPortrait {
     CGFloat screenScale = [UIScreen mainScreen].scale;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     CGFloat width = MIN(screenSize.width, screenSize.height);;
@@ -596,38 +557,85 @@ static BOOL (^_hasDarkImageBlock) (UIImage *image);
     return contextSize;
 }
 
-+ (UIImage *)resizeImage:(UIImage *)image toPortraitScreenSize:(BOOL)isPortrait {
-    CGSize imageSize = CGSizeApplyAffineTransform(image.size,
-                                                  CGAffineTransformMakeScale(image.scale, image.scale));
-    CGSize contextSize = [self contextSizeForPortrait:isPortrait];
++ (UIImage *)createLaunchimageFromSnapshotStoryboardWithisPortrait:(BOOL)isPortrait isDark:(BOOL)isDark {
     
-    if (!CGSizeEqualToSize(imageSize, contextSize)) {
-        UIGraphicsBeginImageContext(contextSize);
-        CGFloat ratio = MAX((contextSize.width / image.size.width),
-                            (contextSize.height / image.size.height));
-        CGRect rect = CGRectMake(0, 0, image.size.width * ratio, image.size.height * ratio);
-        [image drawInRect:rect];
-        UIImage* resizedImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        return resizedImage;
+    NSArray<UIWindow *> *currentWindows = UIApplication.sharedApplication.windows;
+    
+    NSArray<NSNumber *> *interfaceStyleArray = ({
+        NSMutableArray<NSNumber *> *interfaceStyleArray = [NSMutableArray array];
+        if (@available(iOS 13.0, *)) {
+            for (UIWindow *window in currentWindows) {
+                [interfaceStyleArray addObject:[NSNumber numberWithInteger:window.overrideUserInterfaceStyle]];
+            }
+        }
+        interfaceStyleArray.copy;
+    });
+        
+    if (@available(iOS 13.0, *)) {
+        for (UIWindow *currentwindow in currentWindows) {
+            if (currentwindow.hidden == NO) {
+                if (isDark) {
+                    currentwindow.overrideUserInterfaceStyle = UIUserInterfaceStyleDark;
+                } else {
+                    currentwindow.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+                }
+            }
+        }
     }
     
-    return image;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:launchScreenName() bundle:nil];
+    UIViewController *launchImageVC = storyboard.instantiateInitialViewController;
+    launchImageVC.view.frame = [UIScreen mainScreen].bounds;
+    
+    if (isPortrait) {
+        if (launchImageVC.view.frame.size.width > launchImageVC.view.frame.size.height) {
+            launchImageVC.view.frame = CGRectMake(0, 0, launchImageVC.view.frame.size.height, launchImageVC.view.frame.size.width);
+        }
+    } else {
+        if (launchImageVC.view.frame.size.width < launchImageVC.view.frame.size.height) {
+            launchImageVC.view.frame = CGRectMake(0, 0, launchImageVC.view.frame.size.height, launchImageVC.view.frame.size.width);
+        }
+    }
+    
+    [launchImageVC.view setNeedsLayout];
+    [launchImageVC.view layoutIfNeeded];
+    
+    UIGraphicsBeginImageContextWithOptions(launchImageVC.view.frame.size, NO, [UIScreen mainScreen].scale);
+    [launchImageVC.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *launchImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    if (@available(iOS 13.0, *)) {
+        [interfaceStyleArray enumerateObjectsUsingBlock:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UIWindow *window = [currentWindows objectAtIndex:idx];
+            window.overrideUserInterfaceStyle = obj.integerValue;
+        }];
+    }
+    
+    return launchImage;
 }
 
-- (BOOL)checkSize {
-    CGSize screenSize = CGSizeApplyAffineTransform([UIScreen mainScreen].bounds.size,
-                                                   CGAffineTransformMakeScale([UIScreen mainScreen].scale,
-                                                                              [UIScreen mainScreen].scale));
-    CGSize imageSize = CGSizeApplyAffineTransform(self.size,
-                                                  CGAffineTransformMakeScale(self.scale, self.scale));
-    if (CGSizeEqualToSize(imageSize, screenSize)) {
-        return YES;
-    }
-    if (CGSizeEqualToSize(CGSizeMake(imageSize.height, imageSize.width), screenSize)) {
-        return YES;
-    }
-    return NO;
+@end
+
+
+
+@implementation UIViewController (LLDynamicLaunchScreen)
+
++ (void)load {
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(didFinishLaunching) name:UIApplicationDidFinishLaunchingNotification object:nil];
+    method_exchangeImplementations(class_getInstanceMethod(self, @selector(viewDidAppear:)), class_getInstanceMethod(self, @selector(llDynamicLaunchScreen_viewDidAppear:)));
+}
+
++ (void)didFinishLaunching {
+    [LLDynamicLaunchScreen didFinishLaunching];
+}
+
+- (void)llDynamicLaunchScreen_viewDidAppear:(BOOL)animated {
+    [self llDynamicLaunchScreen_viewDidAppear:animated];
+        
+    [LLDynamicLaunchScreen backupSystemLaunchImage];
+    
+    method_exchangeImplementations(class_getInstanceMethod(UIViewController.class, @selector(llDynamicLaunchScreen_viewDidAppear:)), class_getInstanceMethod(UIViewController.class, @selector(viewDidAppear:)));
 }
 
 @end

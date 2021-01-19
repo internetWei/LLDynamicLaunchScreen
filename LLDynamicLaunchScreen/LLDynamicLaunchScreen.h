@@ -1,49 +1,67 @@
 //
 //  LLDynamicLaunchScreen.h
-//  LLLaunchScreen
+//  LLDynamicLaunchScreen
 //
-//  Created by LL on 2020/12/28.
+//  Created by LL on 2021/1/18.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, LLLaunchImageType) {
-    LLLaunchImageTypeVerticalLight,   /**< 浅色竖屏启动图*/
-    LLLaunchImageTypeVerticalDark API_AVAILABLE(tvos(13.0)) ,    /**< 深色竖屏启动图*/
-    LLLaunchImageTypeHorizontalLight, /**< 浅色横屏启动图*/
-    LLLaunchImageTypeHorizontalDark API_AVAILABLE(tvos(13.0)),  /**< 深色横屏启动图*/
+    LLLaunchImageTypeVerticalLight,   /**< 竖屏浅色启动图*/
+    LLLaunchImageTypeVerticalDark API_AVAILABLE(ios(13.0)) ,    /**< 竖屏深色启动图*/
+    LLLaunchImageTypeHorizontalLight, /**< 横屏浅色启动图*/
+    LLLaunchImageTypeHorizontalDark API_AVAILABLE(ios(13.0)),  /**< 横屏深色启动图*/
 };
 
 @interface LLDynamicLaunchScreen : NSObject
 
-/// 启动图文件名称，如果是名称LaunchScreen则不用传递。
-@property (nonatomic, class, nullable) NSString *launchScreenName;
 
 /**
- 自定义暗黑启动图校验规则
+ 自定义暗黑系启动图片校验规则
  
- @discussion 默认情况下，通过获取图片右上角1×1像素单位的RGB值来判断该图片是不是暗黑系图片。
- 如果实现了此方法，返回YES表示该图片是暗黑系图片，可以参考pixelColorFromPoint属性。
+ @discussion 默认情况下，LLDynamicLaunchScreen通过获取图片右上角1×1像素单位的RGB值来判断该图片是不是暗黑系图片；
+ 如果您不满意默认的校验规则，可以在修改启动图前实现此Block自定义校验规则。
  */
-@property (nonatomic, class) BOOL (^hasDarkImageBlock) (UIImage *image);
+@property (nonatomic, class, nullable) BOOL (^hasDarkImageBlock) (UIImage *image);
 
-/// 恢复为系统默认启动图，可以解决启动图异常的问题。
+
+/**
+ 修复启动图不显示等异常情况
+ 
+ @discussion 此操作是安全的，不会丢失已修改的启动图
+ */
++ (void)repairException;
+
+
+/**
+ 将所有启动图恢复为默认启动图
+ 
+ @discussion 此操作具有破坏性，会丢失已修改的启动图。
+ */
 + (void)restoreAsBefore;
 
-/// 替换所有竖图
-+ (void)replaceVerticalLaunchImage:(UIImage *)verticalImage;
-
-/// 替换所有横图
-+ (void)replaceHorizontalLaunchImage:(UIImage *)horizontalImage;
 
 /// 替换指定启动图
-/// @param replaceImage 需要写入的图片
-/// @param type 替换的类型
+/// @param replaceImage 需要写入的图片，传入nil表示恢复为默认启动图。
+/// @param launchImageType 替换的图片类型
 /// @param quality 图片压缩比例，默认为0.8
 /// @param validationBlock 自定义校验回调，返回YES表示替换，NO表示不替换。
-+ (BOOL)replaceLaunchImage:(UIImage *)replaceImage type:(LLLaunchImageType)type compressionQuality:(CGFloat)quality customValidation:(BOOL (^ _Nullable) (UIImage *originImage, UIImage *replaceImage))validationBlock;
++ (BOOL)replaceLaunchImage:(nullable UIImage *)replaceImage
+           launchImageType:(LLLaunchImageType)launchImageType
+        compressionQuality:(CGFloat)quality
+          validation:(BOOL (^ _Nullable) (UIImage *originImage, UIImage *replaceImage))validationBlock;
+
+
+/// 替换所有竖屏启动图
++ (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage;
+
+
+/// 替换所有横屏启动图
++ (void)replaceHorizontalLaunchImage:(nullable UIImage *)horizontalImage;
 
 @end
 
