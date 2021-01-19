@@ -1,15 +1,15 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.1-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.2-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
-Solve abnormal issues such as blank iOS startup map, and support dynamic replacement of startup map.
+Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.
 Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
 Features
 ==============
-- Simple to use, only 1 line of code is needed to modify the startup diagram.
-- Powerful function, supports dynamic modification of any type of startup diagram.
+- It is simple to use, only one line of code can modify any startup diagram.
+- Powerful, supports dynamic modification/repair of any startup diagram.
 - Compatible with models below iOS13.
 
 Demo
@@ -19,7 +19,10 @@ Demo
 Usage
 ==============
 ```objc
-// Fix the abnormal problem of Launch Screen, or restore Launch Screen to its original state.
+// Fix the problem that the startup map is displayed abnormally, and the modified startup map will not be lost.
+[LLDynamicLaunchScreen repairException];
+
+// Restore all startup maps to the default startup map, and the modified startup map will be lost, please use it with caution.
 [LLDynamicLaunchScreen restoreAsBefore];
 
 // Modify the light-colored vertical Launch Screen according to the specified compression rate.
