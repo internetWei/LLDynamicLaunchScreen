@@ -1,6 +1,6 @@
 //
 //  LLDynamicLaunchScreen.h
-//  LLDynamicLaunchScreen
+//  LLDynamicLaunchScreen <https://github.com/internetWei/LLDynamicLaunchScreen>
 //
 //  Created by LL on 2021/1/18.
 //
