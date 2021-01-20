@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.2-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.3-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 解决iOS启动图显示异常的问题，并且支持动态更换启动图。
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
@@ -9,6 +9,7 @@ LLDynamicLaunchScreen
 ==============
 - 使用简单，仅1行代码即可修改任意启动图。
 - 功能强大，支持动态修改/修复任意启动图。
+- 支持获取本地任意启动图对象。
 - 兼容iOS13以下机型。
 
 Demo
@@ -37,6 +38,9 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
     // 在这里实现逻辑，判断该图片是否是深色系图片。
     // 默认情况下，LLDynamicLaunchScreen会获取图片右上角1×1像素点的RGB来判断是不是深色系图片。
 };
+
+// 获取本地竖屏浅色启动图对象。
+[LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalLight];
 ```
 
 安装
