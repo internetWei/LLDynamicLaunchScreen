@@ -121,6 +121,27 @@ static BOOL launchImage_restoreAsBefore = NO;
     } identifier:NSStringFromSelector(@selector(initialization))];
 }
 
++ (UIImage *)launchImageFromType:(LLLaunchImageType)launchImageType {
+    UIImage * __block launchImage = nil;
+    
+    BOOL __block result = [self launchImageCustomBlock:^(NSString *tmpDirectory) {
+        NSString *imageName = LaunchImageNameFromLaunchImageType(launchImageType);
+        NSDictionary *launchImageInfo = [NSUserDefaults.standardUserDefaults objectForKey:launchImageInfoIdentifier];
+        imageName = [launchImageInfo objectForKey:imageName];
+        
+        if (imageName == nil) result = NO;
+        
+        if (imageName) {
+            NSString *fullPath = [tmpDirectory stringByAppendingPathComponent:imageName];
+            launchImage = [UIImage imageWithContentsOfFile:fullPath];
+        }
+    }];
+    
+    if (result == NO) return nil;
+    
+    return launchImage;
+}
+
 + (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage {
     [self replaceLaunchImage:verticalImage launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
     if (@available(iOS 13.0, *)) {
@@ -204,12 +225,14 @@ static BOOL launchImage_restoreAsBefore = NO;
         
         if (imageName == nil) result = NO;
         
-        NSString *fullPath = [tmpDirectory stringByAppendingPathComponent:imageName];
-        UIImage *originImage = [UIImage imageWithContentsOfFile:fullPath];
-        
-        BOOL result = !validationBlock ? YES : validationBlock(originImage, replaceImage);
-        if (result == YES) {
-            [replaceImageData writeToFile:fullPath atomically:YES];
+        if (imageName) {
+            NSString *fullPath = [tmpDirectory stringByAppendingPathComponent:imageName];
+            UIImage *originImage = [UIImage imageWithContentsOfFile:fullPath];
+            
+            BOOL result = !validationBlock ? YES : validationBlock(originImage, replaceImage);
+            if (result == YES) {
+                [replaceImageData writeToFile:fullPath atomically:YES];
+            }
         }
     }];
     

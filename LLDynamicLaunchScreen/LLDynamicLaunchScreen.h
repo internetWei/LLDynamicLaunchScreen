@@ -30,6 +30,16 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
 
 
 /**
+ 获取指定模式下的启动图
+ 
+ @discussion 可能会返回nil
+ 
+ 当您的APP不支持深色/横屏，尝试获取深色/横屏启动图则返回nil
+ */
++ (nullable UIImage *)launchImageFromType:(LLLaunchImageType)launchImageType;
+
+
+/**
  修复启动图不显示等异常情况
  
  @discussion 此操作是安全的，不会丢失已修改的启动图
