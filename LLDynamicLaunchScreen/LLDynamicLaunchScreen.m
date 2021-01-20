@@ -425,7 +425,7 @@ LLLaunchImageType LaunchImageTypeFromLaunchImageName(NSString *launchImageName) 
             return LLLaunchImageTypeHorizontalLight;
         }
     } else {
-        return LLLaunchImageTypeVerticalLight;
+        return LLLaunchImageTypeHorizontalLight;
     }
 }
 
