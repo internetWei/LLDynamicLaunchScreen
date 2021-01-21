@@ -1,8 +1,8 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.5-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.6-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
-Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.
+Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.<br>
 Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
@@ -12,6 +12,7 @@ Features
 - Powerful, supports dynamic modification/repair of any startup diagram.
 - Support to obtain any local startup graph object.
 - Compatible with models below iOS13.
+- Automatically repair the startup map showing black or abnormal problems.
 
 Demo
 ==============
@@ -20,9 +21,6 @@ Demo
 Usage
 ==============
 ```objc
-// Fix the problem that the startup map is displayed abnormally, and the modified startup map will not be lost.
-[LLDynamicLaunchScreen repairException];
-
 // Restore all startup maps to the default startup map, and the modified startup map will be lost, please use it with caution.
 [LLDynamicLaunchScreen restoreAsBefore];
 

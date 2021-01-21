@@ -1,8 +1,8 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.5-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.6-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
-解决iOS启动图显示异常的问题，并且支持动态更换启动图。
+解决iOS启动图显示异常的问题，并且支持动态更换启动图。<br>
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
 
 特性
@@ -11,6 +11,7 @@ LLDynamicLaunchScreen
 - 功能强大，支持动态修改/修复任意启动图。
 - 支持获取本地任意启动图对象。
 - 兼容iOS13以下机型。
+- 自动修复启动图显示黑色或异常问题。
 
 Demo
 ==============
@@ -19,9 +20,6 @@ Demo
 用法
 ==============
 ```objc
-// 修复启动图显示异常的问题，不会丢失已修改的启动图。
-[LLDynamicLaunchScreen repairException];
-
 // 恢复所有启动图为默认启动图，会丢失已修改的启动图，请谨慎使用。
 [LLDynamicLaunchScreen restoreAsBefore];
 
