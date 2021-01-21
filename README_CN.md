@@ -14,7 +14,7 @@ LLDynamicLaunchScreen
 
 Demo
 ==============
-![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo.gif)
+![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo.gif)  ![demo1.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Demo/Resources/demo1.gif)
 
 用法
 ==============

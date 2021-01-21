@@ -15,7 +15,7 @@ Features
 
 Demo
 ==============
-![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo.gif)
+![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo.gif)  ![demo1.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Demo/Resources/demo1.gif)
 
 Usage
 ==============
