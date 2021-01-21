@@ -40,14 +40,6 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
 
 
 /**
- 修复启动图不显示等异常情况
- 
- @discussion 此操作是安全的，不会丢失已修改的启动图
- */
-+ (void)repairException;
-
-
-/**
  将所有启动图恢复为默认启动图
  
  @discussion 此操作具有破坏性，会丢失已修改的启动图。

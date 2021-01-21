@@ -35,7 +35,7 @@
     [button addTarget:self action:@selector(buttonEvent) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button1 setTitle:@"修复异常" forState:UIControlStateNormal];
+    [button1 setTitle:@"恢复如初" forState:UIControlStateNormal];
     [button1 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button1.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
     [self.view addSubview:button1];
@@ -43,20 +43,12 @@
     [button1 addTarget:self action:@selector(button1Event) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button2 setTitle:@"恢复如初" forState:UIControlStateNormal];
+    [button2 setTitle:@"恢复指定启动图" forState:UIControlStateNormal];
     [button2 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button2.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
     [self.view addSubview:button2];
     button2.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button1.frame) + 40.0, 220, 80);
     [button2 addTarget:self action:@selector(button2Event) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button3 setTitle:@"恢复指定启动图" forState:UIControlStateNormal];
-    [button3 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    button3.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
-    [self.view addSubview:button3];
-    button3.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button2.frame) + 40.0, 220, 80);
-    [button3 addTarget:self action:@selector(button3Event) forControlEvents:UIControlEventTouchUpInside];
     
     UILabel *alertLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     self.alertLabel = alertLabel;
@@ -78,18 +70,12 @@
 }
 
 - (void)button1Event {
-    [LLDynamicLaunchScreen repairException];
-    
-    [self showAlertView:@"修复启动图异常，APP即将退出"];
-}
-
-- (void)button2Event {
     [LLDynamicLaunchScreen restoreAsBefore];
     
     [self showAlertView:@"启动图已恢复，APP即将退出"];
 }
 
-- (void)button3Event {
+- (void)button2Event {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择替换方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"恢复浅色竖屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];

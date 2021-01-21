@@ -45,6 +45,8 @@ static BOOL launchImage_restoreAsBefore = NO;
             }
         }
     } identifier:NSStringFromSelector(@selector(didFinishLaunching))];
+    
+    [self repairException];
 }
 
 + (void)initialize {
@@ -71,6 +73,7 @@ static BOOL launchImage_restoreAsBefore = NO;
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(didFinishLaunching))];
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(initialization))];
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(backupSystemLaunchImage))];
+        [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(repairException))];
         
         [NSUserDefaults.standardUserDefaults setObject:versionDictionary.copy forKey:launchImageVersionIdentifier];
         
@@ -157,19 +160,20 @@ static BOOL launchImage_restoreAsBefore = NO;
 }
 
 + (void)repairException {
-    if (doesExistsOriginLaunchImage()) {
-        NSDictionary *modifyDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier];
-        for (NSString *key in modifyDictionary) {
-            NSString *isModify = modifyDictionary[key];
-            if ([isModify isEqualToString:@"NO"]) {
-                [self replaceLaunchImage:nil launchImageType:LaunchImageTypeFromLaunchImageName(key) compressionQuality:0.8 validation:nil];
+    [self launchImageIsNewVersion:^{
+        if (doesExistsOriginLaunchImage()) {
+            NSDictionary *modifyDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageModifyIdentifier];
+            for (NSString *key in modifyDictionary) {
+                NSString *isModify = modifyDictionary[key];
+                if ([isModify isEqualToString:@"NO"]) {
+                    [self replaceLaunchImage:nil launchImageType:LaunchImageTypeFromLaunchImageName(key) compressionQuality:0.8 validation:nil];
+                }
             }
+            launchImage_repairException = NO;
+        } else {
+            launchImage_repairException = YES;
         }
-        
-        launchImage_repairException = NO;
-    } else {
-        launchImage_repairException = YES;
-    }
+    } identifier:NSStringFromSelector(@selector(repairException))];
 }
 
 + (void)restoreAsBefore {
