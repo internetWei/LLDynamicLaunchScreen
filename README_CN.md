@@ -68,7 +68,7 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 ==============
 如果你有更好的改进，please pull reqeust me
 
-如果你有任何更好的意见，请创建一个[Issue](https://github.com/internetWei/LLDynamicLaunchScreen/issues)
+如果你有任何更好的意见，请创建一个[Issue](https://gitee.com/internetWei/lldynamic-launch-screen/issues)
 
 可以通过此邮箱联系作者`internetwei@foxmail.com`
 
