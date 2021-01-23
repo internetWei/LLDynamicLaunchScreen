@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6A434E0D25BC6638008EE8BC /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A434E0B25BC6638008EE8BC /* LLDynamicLaunchScreen.m */; };
 		6A434E0E25BC6638008EE8BC /* LLDynamicLaunchScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A434E0C25BC6638008EE8BC /* LLDynamicLaunchScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6A434E2725BC692B008EE8BC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A434E2625BC692B008EE8BC /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -133,7 +132,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A434E2725BC692B008EE8BC /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,7 +275,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -301,7 +299,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "";
+				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
