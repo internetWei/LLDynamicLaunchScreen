@@ -7,15 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6A434D8025BC2203008EE8BC /* LLDynamicLaunchScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A434D7A25BC21E6008EE8BC /* LLDynamicLaunchScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6A434D8325BC220C008EE8BC /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A434D7B25BC21E6008EE8BC /* LLDynamicLaunchScreen.m */; };
+		6A434D9C25BC23E2008EE8BC /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6A434D9B25BC23E2008EE8BC /* Info.plist */; };
+		6A434DA025BC2401008EE8BC /* LLDynamicLaunchScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A434D9725BC23C9008EE8BC /* LLDynamicLaunchScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A434DA325BC2406008EE8BC /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A434D9625BC23C9008EE8BC /* LLDynamicLaunchScreen.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6A434D6025BC20EF008EE8BC /* LLDynamicLaunchScreen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LLDynamicLaunchScreen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A434D6425BC20EF008EE8BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6A434D7A25BC21E6008EE8BC /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LLDynamicLaunchScreen.h; path = ../../LLDynamicLaunchScreen/LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
-		6A434D7B25BC21E6008EE8BC /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LLDynamicLaunchScreen.m; path = ../../LLDynamicLaunchScreen/LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
+		6A434D9625BC23C9008EE8BC /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
+		6A434D9725BC23C9008EE8BC /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
+		6A434D9B25BC23E2008EE8BC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,7 +33,7 @@
 		6A434D5625BC20EF008EE8BC = {
 			isa = PBXGroup;
 			children = (
-				6A434D6225BC20EF008EE8BC /* LLDynamicLaunchScreen */,
+				6A434D9525BC23C9008EE8BC /* LLDynamicLaunchScreen */,
 				6A434D6125BC20EF008EE8BC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -45,14 +46,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6A434D6225BC20EF008EE8BC /* LLDynamicLaunchScreen */ = {
+		6A434D9525BC23C9008EE8BC /* LLDynamicLaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6A434D7A25BC21E6008EE8BC /* LLDynamicLaunchScreen.h */,
-				6A434D7B25BC21E6008EE8BC /* LLDynamicLaunchScreen.m */,
-				6A434D6425BC20EF008EE8BC /* Info.plist */,
+				6A434D9725BC23C9008EE8BC /* LLDynamicLaunchScreen.h */,
+				6A434D9625BC23C9008EE8BC /* LLDynamicLaunchScreen.m */,
+				6A434D9B25BC23E2008EE8BC /* Info.plist */,
 			);
-			path = LLDynamicLaunchScreen;
+			name = LLDynamicLaunchScreen;
+			path = ../LLDynamicLaunchScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -62,7 +64,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A434D8025BC2203008EE8BC /* LLDynamicLaunchScreen.h in Headers */,
+				6A434DA025BC2401008EE8BC /* LLDynamicLaunchScreen.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +125,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A434D9C25BC23E2008EE8BC /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,7 +136,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A434D8325BC220C008EE8BC /* LLDynamicLaunchScreen.m in Sources */,
+				6A434DA325BC2406008EE8BC /* LLDynamicLaunchScreen.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
