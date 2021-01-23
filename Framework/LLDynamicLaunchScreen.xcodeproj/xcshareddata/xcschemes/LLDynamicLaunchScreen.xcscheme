@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6A434D5F25BC20EF008EE8BC"
+               BlueprintIdentifier = "6A434DD425BC6171008EE8BC"
                BuildableName = "LLDynamicLaunchScreen.framework"
                BlueprintName = "LLDynamicLaunchScreen"
                ReferencedContainer = "container:LLDynamicLaunchScreen.xcodeproj">
@@ -50,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6A434D5F25BC20EF008EE8BC"
+            BlueprintIdentifier = "6A434DD425BC6171008EE8BC"
             BuildableName = "LLDynamicLaunchScreen.framework"
             BlueprintName = "LLDynamicLaunchScreen"
             ReferencedContainer = "container:LLDynamicLaunchScreen.xcodeproj">

@@ -10,6 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT double LLDynamicLaunchScreenVersionNumber;
+
+FOUNDATION_EXPORT const unsigned char LLDynamicLaunchScreenVersionString[];
+
 typedef NS_ENUM(NSInteger, LLLaunchImageType) {
     LLLaunchImageTypeVerticalLight,   /**< 竖屏浅色启动图*/
     LLLaunchImageTypeVerticalDark API_AVAILABLE(ios(13.0)) ,    /**< 竖屏深色启动图*/

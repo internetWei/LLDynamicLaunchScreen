@@ -14,11 +14,11 @@
 		6A405F4225A07DC1007EA6D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A405F4125A07DC1007EA6D4 /* Assets.xcassets */; };
 		6A405F4825A07DC1007EA6D4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A405F4725A07DC1007EA6D4 /* main.m */; };
 		6A405F5325A07E35007EA6D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A405F5225A07E35007EA6D4 /* LaunchScreen.storyboard */; };
-		6A405F5925A07EC6007EA6D4 /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A405F5725A07EC5007EA6D4 /* LLDynamicLaunchScreen.m */; };
+		6A434DF825BC6408008EE8BC /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A434DF625BC6408008EE8BC /* LLDynamicLaunchScreen.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6A405F3225A07DBF007EA6D4 /* LLDynamicLaunchScreen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LLDynamicLaunchScreen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6A405F3225A07DBF007EA6D4 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A405F3525A07DBF007EA6D4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6A405F3625A07DBF007EA6D4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6A405F3825A07DBF007EA6D4 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -30,8 +30,8 @@
 		6A405F4625A07DC1007EA6D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A405F4725A07DC1007EA6D4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6A405F5225A07E35007EA6D4 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		6A405F5725A07EC5007EA6D4 /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
-		6A405F5825A07EC5007EA6D4 /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
+		6A434DF625BC6408008EE8BC /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
+		6A434DF725BC6408008EE8BC /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,7 +48,7 @@
 		6A405F2925A07DBF007EA6D4 = {
 			isa = PBXGroup;
 			children = (
-				6A405F3425A07DBF007EA6D4 /* LLDynamicLaunchScreen */,
+				6A405F3425A07DBF007EA6D4 /* Demo */,
 				6A405F3325A07DBF007EA6D4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,15 +56,15 @@
 		6A405F3325A07DBF007EA6D4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6A405F3225A07DBF007EA6D4 /* LLDynamicLaunchScreen.app */,
+				6A405F3225A07DBF007EA6D4 /* Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		6A405F3425A07DBF007EA6D4 /* LLDynamicLaunchScreen */ = {
+		6A405F3425A07DBF007EA6D4 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				6A405F5625A07EC5007EA6D4 /* LLDynamicLaunchScreen */,
+				6A434DF525BC6408008EE8BC /* LLDynamicLaunchScreen */,
 				6A405F3525A07DBF007EA6D4 /* AppDelegate.h */,
 				6A405F3625A07DBF007EA6D4 /* AppDelegate.m */,
 				6A405F3825A07DBF007EA6D4 /* SceneDelegate.h */,
@@ -77,14 +77,14 @@
 				6A405F4625A07DC1007EA6D4 /* Info.plist */,
 				6A405F4725A07DC1007EA6D4 /* main.m */,
 			);
-			path = LLDynamicLaunchScreen;
+			path = Demo;
 			sourceTree = "<group>";
 		};
-		6A405F5625A07EC5007EA6D4 /* LLDynamicLaunchScreen */ = {
+		6A434DF525BC6408008EE8BC /* LLDynamicLaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6A405F5825A07EC5007EA6D4 /* LLDynamicLaunchScreen.h */,
-				6A405F5725A07EC5007EA6D4 /* LLDynamicLaunchScreen.m */,
+				6A434DF725BC6408008EE8BC /* LLDynamicLaunchScreen.h */,
+				6A434DF625BC6408008EE8BC /* LLDynamicLaunchScreen.m */,
 			);
 			name = LLDynamicLaunchScreen;
 			path = ../../LLDynamicLaunchScreen;
@@ -93,9 +93,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6A405F3125A07DBF007EA6D4 /* LLDynamicLaunchScreen */ = {
+		6A405F3125A07DBF007EA6D4 /* Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6A405F4B25A07DC1007EA6D4 /* Build configuration list for PBXNativeTarget "LLDynamicLaunchScreen" */;
+			buildConfigurationList = 6A405F4B25A07DC1007EA6D4 /* Build configuration list for PBXNativeTarget "Demo" */;
 			buildPhases = (
 				6A405F2E25A07DBF007EA6D4 /* Sources */,
 				6A405F2F25A07DBF007EA6D4 /* Frameworks */,
@@ -105,9 +105,9 @@
 			);
 			dependencies = (
 			);
-			name = LLDynamicLaunchScreen;
-			productName = LLDynamicLaunchScreen;
-			productReference = 6A405F3225A07DBF007EA6D4 /* LLDynamicLaunchScreen.app */;
+			name = Demo;
+			productName = Demo;
+			productReference = 6A405F3225A07DBF007EA6D4 /* Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -123,7 +123,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 6A405F2D25A07DBF007EA6D4 /* Build configuration list for PBXProject "LLDynamicLaunchScreen" */;
+			buildConfigurationList = 6A405F2D25A07DBF007EA6D4 /* Build configuration list for PBXProject "Demo" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -136,7 +136,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6A405F3125A07DBF007EA6D4 /* LLDynamicLaunchScreen */,
+				6A405F3125A07DBF007EA6D4 /* Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -162,7 +162,7 @@
 				6A405F3D25A07DBF007EA6D4 /* ViewController.m in Sources */,
 				6A405F3725A07DBF007EA6D4 /* AppDelegate.m in Sources */,
 				6A405F4825A07DC1007EA6D4 /* main.m in Sources */,
-				6A405F5925A07EC6007EA6D4 /* LLDynamicLaunchScreen.m in Sources */,
+				6A434DF825BC6408008EE8BC /* LLDynamicLaunchScreen.m in Sources */,
 				6A405F3A25A07DBF007EA6D4 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,7 +300,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = LLDynamicLaunchScreen/Info.plist;
+				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -320,7 +320,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = LLDynamicLaunchScreen/Info.plist;
+				INFOPLIST_FILE = Demo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -336,7 +336,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		6A405F2D25A07DBF007EA6D4 /* Build configuration list for PBXProject "LLDynamicLaunchScreen" */ = {
+		6A405F2D25A07DBF007EA6D4 /* Build configuration list for PBXProject "Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6A405F4925A07DC1007EA6D4 /* Debug */,
@@ -345,7 +345,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6A405F4B25A07DC1007EA6D4 /* Build configuration list for PBXNativeTarget "LLDynamicLaunchScreen" */ = {
+		6A405F4B25A07DC1007EA6D4 /* Build configuration list for PBXNativeTarget "Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6A405F4C25A07DC1007EA6D4 /* Debug */,
