@@ -1,0 +1,6 @@
+framework module LLDynamicLaunchScreen {
+  umbrella header "LLDynamicLaunchScreen.h"
+
+  export *
+  module * { export * }
+}
