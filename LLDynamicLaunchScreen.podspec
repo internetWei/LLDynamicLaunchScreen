@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'LLDynamicLaunchScreen'
-  s.version          = '0.1.6'
+  s.version          = '0.2.0'
   s.summary          = 'Dynamically modify the iOS Launch Image'
   s.homepage         = 'https://github.com/internetWei/LLDynamicLaunchScreen'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

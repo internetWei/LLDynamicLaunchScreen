@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.6-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 解决iOS启动图显示异常的问题，并且支持动态更换启动图。<br>
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
@@ -46,7 +46,13 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 ### CocoaPods
 1. 在 Podfile 中添加 pod 'LLDynamicLaunchScreen'。
 2. 执行 pod install --repo-update。
-3. 导入 <LLDynamicLaunchScreen/LLDynamicLaunchScreen.h>。
+3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>。
+
+### Carthage
+1. 在 Cartfile 中添加 `github "internetWei/LLDynamicLaunchScreen"`。
+2. 执行 `carthage update --platform ios` 并将生成的 framework 添加到你的工程。
+3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>。
+4. [Xcode12生成Cartifle失败参考文章](https://www.liangzl.com/get-article-detail-210255.html)
 
 ### 手动安装
 1. 下载 LLDynamicLaunchScreen 文件夹内的所有内容。

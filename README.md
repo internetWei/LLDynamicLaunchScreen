@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.1.6-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.<br>
 Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
@@ -47,7 +47,13 @@ Installation
 ### CocoaPods
 1. Add pod 'LLDynamicLaunchScreen' to your Podfile.
 2. Run pod install --repo-update.
-3. Import <LLDynamicLaunchScreen/LLDynamicLaunchScreen.h>.
+3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
+
+### Carthage
+
+1. Add `github "internetWei/LLDynamicLaunchScreen"` to your Cartfile.
+2. Run `carthage update --platform ios` and add the framework to your project.
+3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
 
 ### Manually
 1. Download all the files in the LLDynamicLaunchScreen subdirectory.

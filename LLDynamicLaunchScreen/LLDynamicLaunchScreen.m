@@ -292,16 +292,16 @@ static BOOL launchImage_restoreAsBefore = NO;
         }
         
         // 3.将启动图保存到备份文件夹
-        if (verticalLightImage) {
+        if (verticalLightImage && verticalLightPath) {
             [UIImageJPEGRepresentation(verticalLightImage, 0.8) writeToFile:verticalLightPath atomically:YES];
         }
-        if (verticalDarkImage) {
+        if (verticalDarkImage && verticalDarkPath) {
             [UIImageJPEGRepresentation(verticalDarkImage, 0.8) writeToFile:verticalDarkPath atomically:YES];
         }
-        if (horizontalLightImage) {
+        if (horizontalLightImage && horizontalLightPath) {
             [UIImageJPEGRepresentation(horizontalLightImage, 0.8) writeToFile:horizontalLightPath atomically:YES];
         }
-        if (horizontalDarkImage) {
+        if (horizontalDarkImage && horizontalDarkPath) {
             [UIImageJPEGRepresentation(horizontalDarkImage, 0.8) writeToFile:horizontalDarkPath atomically:YES];
         }
         
@@ -341,6 +341,8 @@ static BOOL launchImage_restoreAsBefore = NO;
     
     // 还原系统启动图信息
     moveResult = [fileManager moveItemAtPath:tmpDirectory toPath:systemDirectory error:nil];
+    
+    if (!moveResult) return NO;
     
     // 清理工作目录
     if ([fileManager fileExistsAtPath:tmpDirectory]) {
