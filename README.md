@@ -50,7 +50,6 @@ Installation
 3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
 
 ### Carthage
-
 1. Add `github "internetWei/LLDynamicLaunchScreen"` to your Cartfile.
 2. Run `carthage update --platform ios` and add the framework to your project.
 3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
