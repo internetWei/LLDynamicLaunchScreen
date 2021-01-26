@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; [![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
 Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.<br>
 Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
@@ -8,56 +8,50 @@ Chinese mainland users can access[This link](https://gitee.com/internetWei/lldyn
 
 Features
 ==============
-- It is simple to use, only one line of code can modify any startup diagram.
-- Powerful, supports dynamic modification/repair of any startup diagram.
-- Support to obtain any local startup graph object.
-- Compatible with models below iOS13.
-- Automatically repair the startup map showing black or abnormal problems.
+- After integration, automatically repair the startup map display abnormalities and other issues
+- 1 line of code to modify any startup diagram
+- Support to get the current startup graph object
+- Compatible with systems below iOS13
 
 Demo
 ==============
-![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/demo.gif)  ![demo1.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/demo1.gif)
+| Dynamic modification  | Fix the abnormal display of the launch image |
+| ------------- | ------------- |
+| ![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/demo.gif)  | ![repair.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/Repair.gif)  |
 
 Usage
 ==============
 ```objc
-// Restore all startup maps to the default startup map, and the modified startup map will be lost, please use it with caution.
+// Restore all launch image to the default launch image
 [LLDynamicLaunchScreen restoreAsBefore];
 
-// Modify the light-colored vertical Launch Screen according to the specified compression rate.
+// Modify the launch image at the specified location
 [LLDynamicLaunchScreen replaceLaunchImage:replaceImage type:LLLaunchImageTypeVerticalLight compressionQuality:0.8 customValidation:nil];
 
-// According to the specified compression ratio, it is up to you to determine whether you need to modify Launch Screen.
-[LLDynamicLaunchScreen replaceLaunchImage:selectedImage type:LLLaunchImageTypeVerticalLight compressionQuality:0.8 customValidation:^BOOL(UIImage * _Nonnull originImage, UIImage * _Nonnull replaceImage) {
-    // Write logic here to determine whether you need to replace Launch Screen?
-}];
-
-// Customize the dark picture judgment logic.
+// Customize dark launch image logic
 LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
-    // Implement logic here to determine whether the picture is a dark picture.
-    // By default, LLDynamicLaunchScreen will obtain the 1×1 pixel RGB at the upper right corner of the picture to determine whether it is a dark picture.
 };
 
-// Get the local light-colored startup map object in vertical screen.
+// Get the local launch image
 [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalLight];
 ```
 
 Installation
 ==============
 ### CocoaPods
-1. Add pod 'LLDynamicLaunchScreen' to your Podfile.
-2. Run pod install --repo-update.
-3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
+1. Add pod 'LLDynamicLaunchScreen' to your Podfile
+2. Run pod install --repo-update
+3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>
 
 ### Carthage
-1. Add `github "internetWei/LLDynamicLaunchScreen"` to your Cartfile.
-2. Run `carthage update --platform ios` and add the framework to your project.
-3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>.
+1. Add `github "internetWei/LLDynamicLaunchScreen"` to your Cartfile
+2. Run `carthage update --platform ios` and add the framework to your project
+3. Import \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>
 
 ### Manually
-1. Download all the files in the LLDynamicLaunchScreen subdirectory.
-2. Add (drag and drop) the LLDynamicLaunchScreen folder to your project.
-3. Import LLDynamicLaunchScreen.h.
+1. Download all the files in the LLDynamicLaunchScreen subdirectory
+2. Add (drag and drop) the LLDynamicLaunchScreen folder to your project
+3. Import "LLDynamicLaunchScreen.h"
 
 Requirements
 ==============
