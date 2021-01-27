@@ -15,7 +15,7 @@ LLDynamicLaunchScreen
 Demo
 ==============
 | 动态修改任意启动图  | 修复启动图显示异常等问题 |
-| ------------- | ------------- |
+| :-------------: | :-------------: |
 | ![demo.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Resources/demo.gif)  | ![repair.gif](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/Resources/Repair.gif)  |
 
 用法

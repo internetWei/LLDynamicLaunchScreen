@@ -15,8 +15,8 @@ Features
 
 Demo
 ==============
-| Dynamic modification  | Fix the abnormal display of the launch image |
-| ------------- | ------------- |
+| Dynamic modification  | Fix exception |
+| :-------------: | :-------------: |
 | ![demo.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/demo.gif)  | ![repair.gif](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/Resources/Repair.gif)  |
 
 Usage
