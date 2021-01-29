@@ -41,12 +41,12 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 ### CocoaPods
 1. 在 Podfile 中添加 pod 'LLDynamicLaunchScreen'
 2. 执行 pod install --repo-update
-3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>。
+3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>
 
 ### Carthage
 1. 在 Cartfile 中添加 `github "internetWei/LLDynamicLaunchScreen"`
 2. 执行 `carthage update --platform ios` 并将生成的 framework 添加到你的工程
-3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>。
+3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>
 4. [Xcode12生成Carthage失败参考文章](https://www.liangzl.com/get-article-detail-210255.html)
 
 ### 手动安装
