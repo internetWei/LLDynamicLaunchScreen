@@ -10,3 +10,5 @@ notifications:
     on_failure: always
 script:
 - cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.2'
+after_success:
+- bash <(curl -s https://codecov.io/bash)
