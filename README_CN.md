@@ -2,7 +2,7 @@ LLDynamicLaunchScreen
 ==============
 [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Build Status](https://travis-ci.com/internetWei/LLDynamicLaunchScreen.svg?branch=master)](https://travis-ci.com/github/internetWei/LLDynamicLaunchScreen)&nbsp;&nbsp; [![codecov.io](https://codecov.io/github/internetwei/LLDynamicLaunchScreen/coverage.svg?branch=master)](https://codecov.io/github/internetwei/LLDynamicLaunchScreen?branch=master)
 
-解决iOS启动图显示异常的BUG，并且支持动态替换任意启动图。<br>
+解决iOS启动图显示异常的BUG，并且支持动态替换任意启动图<br>
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
 
 特性
@@ -21,18 +21,18 @@ Demo
 用法
 ==============
 ```objc
-// 恢复所有启动图为默认启动图。
+// 恢复所有启动图为默认启动图
 [LLDynamicLaunchScreen restoreAsBefore];
 
 // 修改指定位置的启动图
 [LLDynamicLaunchScreen replaceLaunchImage:replaceImage type:LLLaunchImageTypeVerticalLight compressionQuality:0.8 customValidation:nil];
 
-// 自定义暗黑图片判断逻辑。
+// 自定义暗黑图片判断逻辑
 LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
-    // 在这里实现逻辑，判断该图片是否是深色系图片。
+    // 在这里实现逻辑，判断该图片是否是深色系图片
 };
 
-// 获取本地指定启动图。
+// 获取本地指定启动图
 [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalLight];
 ```
 
@@ -56,12 +56,12 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 
 系统要求
 ==============
-该项目最低支持iOS9.0和Xcode10.0，如果想在更低系统上使用可以联系作者。
+该项目最低支持iOS9.0和Xcode10.0，如果想在更低系统上使用可以联系作者
 
 注意点
 ==============
-* 替换图片的尺寸建议和屏幕物理分辨率保持一致。
-* APP更新版本后，第一次打开APP会显示默认启动图。这是系统限制，暂时没办法解决。
+* 替换图片的尺寸建议和屏幕物理分辨率保持一致
+* APP更新版本后，第一次打开APP会显示默认启动图；这是系统限制，暂时没办法解决
 
 联系作者
 ==============
@@ -73,4 +73,4 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 
 许可证
 ==============
-LLDynamicLaunchScreen 使用 MIT 许可证，详情见 LICENSE 文件。
+LLDynamicLaunchScreen 使用 MIT 许可证，详情见 LICENSE 文件
