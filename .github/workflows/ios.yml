@@ -1,0 +1,20 @@
+name: LLDynamicLaunchScreen CI
+
+on: 
+  push:
+    branches: 
+      - master
+  pull_request:
+    branches: 
+      - '*'
+
+jobs:
+  iOS:
+    name: Test iOS
+    runs-on: macOS-latest
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_12.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v2
+      - name: iOS
+        run: cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.2'
