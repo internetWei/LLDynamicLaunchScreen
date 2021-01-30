@@ -68,7 +68,6 @@ BOOL isSnapShotSuffix(NSString *imageName) {
     } else {
         
         BOOL imageNameCheck = NO;
-        // 判断启动图后缀是否合法
         for (NSString *imageName in [fileManager contentsOfDirectoryAtPath:tmpDirectory error:nil]) {
             if (isSnapShotSuffix(imageName)) {
                 imageNameCheck = YES;
