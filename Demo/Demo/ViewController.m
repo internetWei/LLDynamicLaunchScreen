@@ -8,7 +8,6 @@
 #import "ViewController.h"
 
 #import <PhotosUI/PHPicker.h>
-#import <Photos/Photos.h>
 #import "LLDynamicLaunchScreen.h"
 
 @interface ViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
@@ -27,7 +26,7 @@
     CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:@"选择照片" forState:UIControlStateNormal];
+    [button setTitle:@"Select photo" forState:UIControlStateNormal];
     [button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
     [self.view addSubview:button];
@@ -35,7 +34,7 @@
     [button addTarget:self action:@selector(buttonEvent) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button1 setTitle:@"恢复如初" forState:UIControlStateNormal];
+    [button1 setTitle:@"Reset All(恢复如初)" forState:UIControlStateNormal];
     [button1 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button1.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
     [self.view addSubview:button1];
@@ -43,7 +42,7 @@
     [button1 addTarget:self action:@selector(button1Event) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button2 setTitle:@"恢复指定启动图" forState:UIControlStateNormal];
+    [button2 setTitle:@"Reset specified(恢复指定启动图)" forState:UIControlStateNormal];
     [button2 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button2.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
     [self.view addSubview:button2];
@@ -57,8 +56,8 @@
     alertLabel.backgroundColor = [UIColor blackColor];
     alertLabel.textColor = [UIColor whiteColor];
     alertLabel.layer.cornerRadius = 5.0;
-    alertLabel.numberOfLines = 0;
     alertLabel.layer.masksToBounds = YES;
+    alertLabel.numberOfLines = 0;
     [self.view addSubview:alertLabel];
     alertLabel.hidden = YES;
 }
@@ -72,42 +71,42 @@
 - (void)button1Event {
     [LLDynamicLaunchScreen restoreAsBefore];
     
-    [self showAlertView:@"启动图已恢复，APP即将退出"];
+    [self showAlertView:@"Success，APP is about to exit"];
 }
 
 - (void)button2Event {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择替换方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"恢复浅色竖屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select LLaunchScreenType" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"VerticalLight(竖屏浅色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
-        [self showAlertView:@"浅色竖屏启动图恢复成功，APP即将退出"];
+        [self showAlertView:@"Success，APP is about to exit"];
     }];
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"恢复浅色横屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"HorizontalLight(横屏浅色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
-        [self showAlertView:@"浅色横屏启动图恢复成功，APP即将退出"];
+        [self showAlertView:@"Success，APP is about to exit"];
     }];
-    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"恢复深色竖屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"VerticalDark(竖屏深色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (@available(iOS 13.0, *)) {
             [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"深色竖屏启动图恢复成功，APP即将退出"];
+            [self showAlertView:@"Success，APP is about to exit"];
         } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS13以下系统不支持修复深色启动图" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This feature is not supported in systems below iOS13" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:cancelAction];
             [self presentViewController:alert animated:YES completion:nil];
         }
     }];
-    UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"恢复深色横屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"HorizontalDark(横屏深色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (@available(iOS 13.0, *)) {
             [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"深色横屏启动图恢复成功，APP即将退出"];
+            [self showAlertView:@"Success，APP is about to exit"];
         } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS13以下系统不支持修复深色启动图" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This feature is not supported in systems below iOS13" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:cancelAction];
             [self presentViewController:alert animated:YES completion:nil];
         }
     }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:action1];
     [alert addAction:action2];
     [alert addAction:action3];
@@ -120,38 +119,38 @@
     
     UIImage *selectedImage = info[UIImagePickerControllerOriginalImage];
     [picker dismissViewControllerAnimated:YES completion:^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"请选择替换方式" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"替换浅色竖屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Select LLaunchScreenType" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"VerticalLight(竖屏浅色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"浅色竖屏启动图替换成功，APP即将退出"];
+            [self showAlertView:@"Success，APP is about to exit"];
         }];
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"替换浅色横屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"HorizontalLight(横屏浅色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"浅色横屏启动图替换成功，APP即将退出"];
+            [self showAlertView:@"Success，APP is about to exit"];
         }];
-        UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"替换深色竖屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"VerticalDark(竖屏深色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (@available(iOS 13.0, *)) {
                 [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
-                [self showAlertView:@"深色竖屏启动图替换成功，APP即将退出"];
+                [self showAlertView:@"Success，APP is about to exit"];
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS13以下系统不支持替换深色启动图" message:nil preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This feature is not supported in systems below iOS13" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleCancel handler:nil];
                 [alert addAction:cancelAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
         }];
-        UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"替换深色横屏启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"HorizontalDark(横屏深色启动图)" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (@available(iOS 13.0, *)) {
                 [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
-                [self showAlertView:@"深色横屏启动图替换成功，APP即将退出"];
+                [self showAlertView:@"Success，APP is about to exit"];
             } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"iOS13以下系统不支持替换深色启动图" message:nil preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"This feature is not supported in systems below iOS13" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Sure" style:UIAlertActionStyleCancel handler:nil];
                 [alert addAction:cancelAction];
                 [self presentViewController:alert animated:YES completion:nil];
             }
         }];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
         [alert addAction:action1];
         [alert addAction:action2];
         [alert addAction:action3];
