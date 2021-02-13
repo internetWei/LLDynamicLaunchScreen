@@ -45,6 +45,7 @@
     [button2 setTitle:@"Reset specified(恢复指定启动图)" forState:UIControlStateNormal];
     [button2 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
     button2.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
+    button2.titleLabel.numberOfLines = 2;
     [self.view addSubview:button2];
     button2.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button1.frame) + 40.0, 220, 80);
     [button2 addTarget:self action:@selector(button2Event) forControlEvents:UIControlEventTouchUpInside];

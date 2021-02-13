@@ -732,12 +732,6 @@ NSString * originLaunchImageFullBackupPath(void) {
         }];
     }
     
-    UIImageView *imageView = [[UIImageView alloc] init];
-    imageView.backgroundColor = UIColor.redColor;
-    imageView.image = launchImage;
-    imageView.frame = CGRectMake(50, 50, UIScreen.mainScreen.bounds.size.width - 100, UIScreen.mainScreen.bounds.size.height - 100);
-    [UIApplication.sharedApplication.windows.firstObject addSubview:imageView];
-    
     return launchImage;
 }
 
