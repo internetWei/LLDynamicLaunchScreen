@@ -1,14 +1,14 @@
 LLDynamicLaunchScreen
 ==============
-[![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-0.2.0-blue)](http://cocoapods.org/pods/LLDark)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
+[![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-0.2.1-blue)](http://cocoapods.org/pods/LLDark)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
-解决iOS启动图显示异常的BUG，并且支持动态替换任意启动图<br>
+解决iOS启动图显示异常，并且支持动态替换任意启动图<br>
 中国大陆用户可以访问[这个链接](https://gitee.com/internetWei/lldynamic-launch-screen)
 
 特性
 ==============
-- 集成后自动修复启动图显示异常等问题
-- 1行代码修改任意启动图
+- 集成后自动修复启动图显示异常
+- 1行代码即可修改任意启动图
 - 支持获取当前启动图对象
 - 兼容iOS13以下系统
 
@@ -21,18 +21,18 @@ Demo
 用法
 ==============
 ```objc
-// 恢复所有启动图为默认启动图
+// 将所有启动图恢复为默认启动图(Restore all launch screen to the initial state)
 [LLDynamicLaunchScreen restoreAsBefore];
 
-// 修改指定位置的启动图
+// 替换指定类型启动图(Replace the specified type of launch Image)
 [LLDynamicLaunchScreen replaceLaunchImage:replaceImage type:LLLaunchImageTypeVerticalLight compressionQuality:0.8 customValidation:nil];
 
-// 自定义暗黑图片判断逻辑
+// 自定义暗黑系启动图的校验规则(Customize the verification rules of the dark style launch screen)
 LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
-    // 在这里实现逻辑，判断该图片是否是深色系图片
+        
 };
 
-// 获取本地指定启动图
+// 获取指定模式下的本地启动图(Get the local launch screen diagram in the specified mode)
 [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalLight];
 ```
 
@@ -47,7 +47,7 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 1. 在 Cartfile 中添加 `github "internetWei/LLDynamicLaunchScreen"`
 2. 执行 `carthage update --platform ios` 并将生成的 framework 添加到你的工程
 3. 导入 \<LLDynamicLaunchScreen/LLDynamicLaunchScreen.h\>
-4. [Xcode12生成Carthage失败参考文章](https://www.liangzl.com/get-article-detail-210255.html)
+4. [Xcode12生成Carthage失败解决方案](https://www.liangzl.com/get-article-detail-210255.html)
 
 ### 手动安装
 1. 下载 LLDynamicLaunchScreen 文件夹内的所有内容
@@ -61,7 +61,7 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 注意点
 ==============
 * 替换图片的尺寸建议和屏幕物理分辨率保持一致
-* APP更新版本后，第一次打开APP会显示默认启动图；这是系统限制，暂时没办法解决
+* APP更新版本后，第一次打开APP会显示默认启动图，这是系统限制，暂时没办法解决
 
 联系作者
 ==============
