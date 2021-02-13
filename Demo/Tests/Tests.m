@@ -101,42 +101,43 @@ NSString * LaunchImageNameFromLaunchImageType(LLLaunchImageType launchImageType)
 }
 
 
-- (void)testLaunchImageNameDictionary {
-    NSMutableArray *nameArray = [NSMutableArray array];
-    [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
-    
-    BOOL supportHorizontalScreen = NO;
-    NSArray *t_array = [NSBundle.mainBundle.infoDictionary objectForKey:@"UISupportedInterfaceOrientations"];
-    XCTAssertNotNil(t_array, "t_array not nil");
-    
-    if ([t_array containsObject:@"UIInterfaceOrientationLandscapeLeft"] ||
-        [t_array containsObject:@"UIInterfaceOrientationLandscapeRight"]) {
-        supportHorizontalScreen = YES;
-    }
-    
-    if (supportHorizontalScreen) {
-        [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
-    }
-    
-    if (@available(iOS 13.0, *)) {
-        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-        NSString *interfaceStyle = [infoDictionary objectForKey:@"UIUserInterfaceStyle"];
-        if (![interfaceStyle isEqualToString:@"Light"]) {
-            [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark)];
-            
-            if (supportHorizontalScreen == YES) {
-                [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark)];
-            }
-        }
-    }
-    
-    
-    NSDictionary *infoDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageInfoIdentifier];
-    for (NSString *obj in nameArray) {
-        if ([infoDictionary objectForKey:obj] == nil) {
-            XCTFail();
-        }
-    }
-}
+// 测试本地启动图名称字典是否正确
+//- (void)testLaunchImageNameDictionary {
+//    NSMutableArray *nameArray = [NSMutableArray array];
+//    [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
+//
+//    BOOL supportHorizontalScreen = NO;
+//    NSArray *t_array = [NSBundle.mainBundle.infoDictionary objectForKey:@"UISupportedInterfaceOrientations"];
+//    XCTAssertNotNil(t_array, "t_array not nil");
+//
+//    if ([t_array containsObject:@"UIInterfaceOrientationLandscapeLeft"] ||
+//        [t_array containsObject:@"UIInterfaceOrientationLandscapeRight"]) {
+//        supportHorizontalScreen = YES;
+//    }
+//
+//    if (supportHorizontalScreen) {
+//        [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
+//    }
+//
+//    if (@available(iOS 13.0, *)) {
+//        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+//        NSString *interfaceStyle = [infoDictionary objectForKey:@"UIUserInterfaceStyle"];
+//        if (![interfaceStyle isEqualToString:@"Light"]) {
+//            [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark)];
+//
+//            if (supportHorizontalScreen == YES) {
+//                [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark)];
+//            }
+//        }
+//    }
+//
+//
+//    NSDictionary *infoDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageInfoIdentifier];
+//    for (NSString *obj in nameArray) {
+//        if ([infoDictionary objectForKey:obj] == nil) {
+//            XCTFail();
+//        }
+//    }
+//}
 
 @end
