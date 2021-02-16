@@ -43,12 +43,12 @@ static BOOL launchImage_repairException = NO;
 }
 
 
-void llDynamicIMP(id vc,SEL _cmd) {
+void llDynamicIMP(id vc, SEL _cmd, BOOL newValue) {
     struct objc_super superClazz = {
         .receiver = vc,
         .super_class = class_getSuperclass(object_getClass(vc))
     };
-    ((void (*)(void *, SEL))objc_msgSendSuper)(&superClazz, _cmd);
+    ((void (*)(void *, SEL, BOOL))objc_msgSendSuper)(&superClazz, _cmd, newValue);
     [LLDynamicLaunchScreen backupSystemLaunchImage];
     
     // 还原isa对象(Restore isa object)
@@ -68,6 +68,7 @@ void llDynamicIMP(id vc,SEL _cmd) {
 static NSString *_oldClassName = nil;
 /// 通过KVO在第一个VIewController执行viewDidLoad后执行自定义方法(Use KVO to execute a custom method before the first VIewController executes viewDidLoad)
 + (void)didBecomeKey:(NSNotification *)noti {
+    
     UIWindow *window = noti.object;
     
     if (CGRectEqualToRect(window.frame, UIScreen.mainScreen.bounds) == NO ||
@@ -75,34 +76,36 @@ static NSString *_oldClassName = nil;
         return;
     }
     
-    UIViewController *currentVC = window.rootViewController;
-    if ([currentVC isKindOfClass:UITabBarController.class]) {
-        UITabBarController *t_tabBarController = (UITabBarController *)currentVC;
-        currentVC = t_tabBarController.selectedViewController;
-        if ([currentVC isKindOfClass:UINavigationController.class]) {
+    [self launchImageIsNewVersion:^{
+        UIViewController *currentVC = window.rootViewController;
+        if ([currentVC isKindOfClass:UITabBarController.class]) {
+            UITabBarController *t_tabBarController = (UITabBarController *)currentVC;
+            currentVC = t_tabBarController.selectedViewController;
+            if ([currentVC isKindOfClass:UINavigationController.class]) {
+                UINavigationController *t_nav = (UINavigationController *)currentVC;
+                currentVC = t_nav.topViewController;
+            }
+        } else if ([currentVC isKindOfClass:UINavigationController.class]) {
             UINavigationController *t_nav = (UINavigationController *)currentVC;
             currentVC = t_nav.topViewController;
         }
-    } else if ([currentVC isKindOfClass:UINavigationController.class]) {
-        UINavigationController *t_nav = (UINavigationController *)currentVC;
-        currentVC = t_nav.topViewController;
-    }
-    
-    Method method = class_getInstanceMethod(currentVC.class, NSSelectorFromString(@"viewDidLoad"));
-    NSString *oldClassName = NSStringFromClass(currentVC.class);
-    _oldClassName = oldClassName;
-    NSString *kvoClassName = [@"LLDynamicKVO_" stringByAppendingString:oldClassName];
-    Class kvoClass;
-    kvoClass = objc_lookUpClass(kvoClassName.UTF8String);
-    if (!kvoClass) {
-        kvoClass = objc_allocateClassPair(currentVC.class, kvoClassName.UTF8String, 0);
-        objc_registerClassPair(kvoClass);
-    }
+        
+        Method method = class_getInstanceMethod(currentVC.class, NSSelectorFromString(@"viewDidAppear:"));
+        NSString *oldClassName = NSStringFromClass(currentVC.class);
+        _oldClassName = oldClassName;
+        NSString *kvoClassName = [@"LLDynamicKVO_" stringByAppendingString:oldClassName];
+        Class kvoClass;
+        kvoClass = objc_lookUpClass(kvoClassName.UTF8String);
+        if (!kvoClass) {
+            kvoClass = objc_allocateClassPair(currentVC.class, kvoClassName.UTF8String, 0);
+            objc_registerClassPair(kvoClass);
+        }
 
-    if (method) {
-        class_addMethod(kvoClass,NSSelectorFromString(@"viewDidLoad"), (IMP)llDynamicIMP, "v@");
-    }
-    object_setClass(currentVC, kvoClass);
+        if (method) {
+            class_addMethod(kvoClass,NSSelectorFromString(@"viewDidAppear:"), (IMP)llDynamicIMP, "v@:B");
+        }
+        object_setClass(currentVC, kvoClass);
+    } identifier:NSStringFromSelector(@selector(didBecomeKey:))];
     
     [NSNotificationCenter.defaultCenter removeObserver:self name:UIWindowDidBecomeKeyNotification object:nil];
 }
@@ -151,6 +154,7 @@ static NSString *_oldClassName = nil;
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(initialization))];
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(backupSystemLaunchImage))];
         [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(repairException))];
+        [versionDictionary setObject:@"YES" forKey:NSStringFromSelector(@selector(didBecomeKey:))];
         
         [NSUserDefaults.standardUserDefaults setObject:versionDictionary.copy forKey:launchImageVersionIdentifier];
         
