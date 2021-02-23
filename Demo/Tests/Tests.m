@@ -7,8 +7,6 @@
 
 #import <XCTest/XCTest.h>
 
-#import "LLDynamicLaunchScreen.h"
-
 static NSString * const launchImageInfoIdentifier = @"launchImageInfoIdentifier";
 
 @interface Tests : XCTestCase
@@ -36,20 +34,6 @@ BOOL isSnapShotSuffix(NSString *imageName) {
     if ([imageName hasSuffix:@".ktx"]) return YES;
     if ([imageName hasSuffix:@".png"]) return YES;
     return NO;
-}
-
-
-NSString * LaunchImageNameFromLaunchImageType(LLLaunchImageType launchImageType) {
-    switch (launchImageType) {
-        case LLLaunchImageTypeVerticalLight:
-            return @"LLLaunchImageTypeVerticalLight";
-        case LLLaunchImageTypeVerticalDark:
-            return @"LLLaunchImageTypeVerticalDark";
-        case LLLaunchImageTypeHorizontalLight:
-            return @"LLLaunchImageTypeHorizontalLight";
-        case LLLaunchImageTypeHorizontalDark:
-            return @"LLLaunchImageTypeHorizontalDark";
-    }
 }
 
 
@@ -99,45 +83,5 @@ NSString * LaunchImageNameFromLaunchImageType(LLLaunchImageType launchImageType)
         XCTFail(@"版本号获取失败");
     }
 }
-
-
-// 测试本地启动图名称字典是否正确
-//- (void)testLaunchImageNameDictionary {
-//    NSMutableArray *nameArray = [NSMutableArray array];
-//    [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalLight)];
-//
-//    BOOL supportHorizontalScreen = NO;
-//    NSArray *t_array = [NSBundle.mainBundle.infoDictionary objectForKey:@"UISupportedInterfaceOrientations"];
-//    XCTAssertNotNil(t_array, "t_array not nil");
-//
-//    if ([t_array containsObject:@"UIInterfaceOrientationLandscapeLeft"] ||
-//        [t_array containsObject:@"UIInterfaceOrientationLandscapeRight"]) {
-//        supportHorizontalScreen = YES;
-//    }
-//
-//    if (supportHorizontalScreen) {
-//        [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalLight)];
-//    }
-//
-//    if (@available(iOS 13.0, *)) {
-//        NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-//        NSString *interfaceStyle = [infoDictionary objectForKey:@"UIUserInterfaceStyle"];
-//        if (![interfaceStyle isEqualToString:@"Light"]) {
-//            [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeVerticalDark)];
-//
-//            if (supportHorizontalScreen == YES) {
-//                [nameArray addObject:LaunchImageNameFromLaunchImageType(LLLaunchImageTypeHorizontalDark)];
-//            }
-//        }
-//    }
-//
-//
-//    NSDictionary *infoDictionary = [NSUserDefaults.standardUserDefaults objectForKey:launchImageInfoIdentifier];
-//    for (NSString *obj in nameArray) {
-//        if ([infoDictionary objectForKey:obj] == nil) {
-//            XCTFail();
-//        }
-//    }
-//}
 
 @end
