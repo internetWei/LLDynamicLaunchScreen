@@ -2,15 +2,16 @@ LLDynamicLaunchScreen
 ==============
 [![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/llDark/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-blue)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-0.2.2-blue)](http://cocoapods.org/pods/LLDark)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-lightgrey)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![Support](https://img.shields.io/badge/support-iOS%209%2B-blue)](https://www.apple.com/nl/ios)
 
-Solve the problem of abnormal display of iOS startup map, and support dynamic replacement of startup map.<br>
-Chinese mainland users can access[This link](https://gitee.com/internetWei/lldynamic-launch-screen)<br>
+Automatically fix iPhone startup diagram display abnormality, 1 line of code to modify the launch screen
+
+[Gitee](https://gitee.com/internetWei/lldynamic-launch-screen)
+
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
 Features
 ==============
-- After integration, automatically repair the startup map display abnormalities and other issues
-- 1 line of code to modify any startup diagram
-- Support to get the current startup graph object
+- Automatically repair the abnormal display of the launch screen map
+- 1 line of code to modify the launch screen diagram
 - Compatible with systems below iOS13
 
 Demo
@@ -62,14 +63,17 @@ Note
 ==============
 * The replacement image size is recommended to be consistent with the screen size.
 * After updating the APP, the default startup diagram will be displayed when the APP is opened for the first time. This is caused by system limitations and cannot be resolved temporarily.
+* You can modify the iPad launch screen diagram, but it is not perfect, and subsequent versions will adapt
 
 Contact
 ==============
 If you have better improvements, please pull reqeust me
 
-If you have any better comments, please create one[Issue](https://github.com/internetWei/LLDynamicLaunchScreen/issues)
+If you have any better comments, please create one [Issue](https://github.com/internetWei/LLDynamicLaunchScreen/issues)
 
 The author can be contacted by this email`internetwei@foxmail.com`
+
+[关于LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
 
 License
 ==============
