@@ -4,8 +4,6 @@ LLDynamicLaunchScreen
 
 Automatically fix iPhone startup diagram display abnormality, 1 line of code to modify the launch screen
 
-[Gitee](https://gitee.com/internetWei/lldynamic-launch-screen)
-
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
 Features
@@ -73,7 +71,12 @@ If you have any better comments, please create one [Issue](https://github.com/in
 
 The author can be contacted by this email`internetwei@foxmail.com`
 
-[关于LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+
+To Do List
+==============
+* [ ] Improve iPad launch screen repair and replacement
+* [ ] Repair and replacement of the boot map adapted to tvOS
 
 License
 ==============

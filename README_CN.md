@@ -4,8 +4,6 @@ LLDynamicLaunchScreen
 
 自动修复iPhone启动图显示异常，1行代码修改启动图
 
-[Gitee备份链接](https://gitee.com/internetWei/lldynamic-launch-screen)
-
 特性
 ==============
 - 自动修复启动图显示异常
@@ -71,7 +69,13 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 
 可以通过此邮箱联系作者`internetwei@foxmail.com`
 
-[关于LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+
+
+待办事项
+==============
+* [ ] 完善iPad的启动图修复与替换
+* [ ] 适配tvOS的启动图修复与替换
 
 许可证
 ==============
