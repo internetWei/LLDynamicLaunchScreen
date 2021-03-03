@@ -76,7 +76,6 @@ The author can be contacted by this email`internetwei@foxmail.com`
 To Do List
 ==============
 * [ ] Improve iPad launch screen repair and replacement
-* [ ] Repair and replacement of the boot map adapted to tvOS
 
 License
 ==============

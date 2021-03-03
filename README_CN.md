@@ -75,7 +75,6 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 待办事项
 ==============
 * [ ] 完善iPad的启动图修复与替换
-* [ ] 适配tvOS的启动图修复与替换
 
 许可证
 ==============
