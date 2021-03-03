@@ -1,5 +1,8 @@
 name: LLDynamicLaunchScreen CI
 
+service_name：travis-pro
+repo_token：p5C0WzU20D5gS6hkEYskOpKEbx2Ot06Xr
+
 on: 
   push:
     branches: 
@@ -17,4 +20,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: iOS
-        run: cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.2'
+        run: cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.2' && "coveralls": "jest --coverage --coverageReporters=text-lcov | coveralls"
