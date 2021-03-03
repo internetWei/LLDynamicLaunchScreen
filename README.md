@@ -71,7 +71,7 @@ If you have any better comments, please create one [Issue](https://github.com/in
 
 The author can be contacted by this email`internetwei@foxmail.com`
 
-[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/03/02/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
 
 To Do List
 ==============

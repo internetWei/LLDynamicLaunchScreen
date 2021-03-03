@@ -69,7 +69,7 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 
 可以通过此邮箱联系作者`internetwei@foxmail.com`
 
-[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/02/23/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/03/02/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
 
 
 待办事项
