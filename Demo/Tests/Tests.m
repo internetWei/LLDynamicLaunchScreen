@@ -41,7 +41,7 @@ BOOL isSnapShotSuffix(NSString *imageName) {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *systemDirectory = launchScreenRootPath();
     if ([fileManager fileExistsAtPath:systemDirectory] == NO) {
-        XCTFail(@"启动图文件夹路径不合法");
+        XCTFail(@"系统启动图文件夹路径不存在");
     }
     
     NSString *tmpDirectory = ({
