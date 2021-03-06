@@ -4,6 +4,8 @@ LLDynamicLaunchScreen
 
 自动修复iPhone启动图显示异常，1行代码修改启动图
 
+[点击访问Swift版本](https://github.com/internetWei/LLaunchScreen)
+
 特性
 ==============
 - 自动修复启动图显示异常

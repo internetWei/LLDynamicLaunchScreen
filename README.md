@@ -6,6 +6,8 @@ Automatically fix iPhone startup diagram display abnormality, 1 line of code to 
 
 [中文介绍](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/README_CN.md)
 
+[Click to visit Swift version](https://github.com/internetWei/LLaunchScreen)
+
 Features
 ==============
 - Automatically repair the abnormal display of the launch screen map
