@@ -27,7 +27,7 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
  自定义暗黑系启动图的校验规则(Customize the verification rules of the dark style launch screen)
  
  默认情况下，`LLaunchScreen`通过获取图片最右上角1×1像素单位的RGB值来判断该图片是不是暗黑系图片；
- 如果您需要修改它，请在APP启动时实现它。(default, `LLaunchScreen` judges whether the picture is a dark picture by obtaining the RGB value of the 1×1 pixel unit in the upper right corner of the picture; If you need to modify it, please implement it when the APP starts.)
+ 如果您需要修改它，请在`application: didFinishLaunchingWithOptions:`返回前实现它。(default, `LLaunchScreen` judges whether the picture is a dark picture by obtaining the RGB value of the 1×1 pixel unit in the upper right corner of the picture; If you need to modify it, Please implement it before `application: didFinishLaunchingWithOptions:` returns.)
  */
 @property (nonatomic, class, null_resettable) BOOL (^hasDarkImageBlock) (UIImage *image);
 
