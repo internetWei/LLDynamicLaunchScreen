@@ -22,46 +22,69 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
 
 @interface LLDynamicLaunchScreen : NSObject
 
-
 /**
- 自定义暗黑系启动图的校验规则(Customize the verification rules of the dark style launch screen)
+ 深色启动图校验规则，实现它可以修改深色启动图的识别逻辑。
  
- 默认情况下，`LLaunchScreen`通过获取图片最右上角1×1像素单位的RGB值来判断该图片是不是暗黑系图片；
- 如果您需要修改它，请在`application: didFinishLaunchingWithOptions:`返回前实现它。(default, `LLaunchScreen` judges whether the picture is a dark picture by obtaining the RGB value of the 1×1 pixel unit in the upper right corner of the picture; If you need to modify it, Please implement it before `application: didFinishLaunchingWithOptions:` returns.)
+ @discussion 默认情况下，LLDynamicLaunchScreen会获取启动图最右上角1×1像素点的RGB值来判断
+ 该图片是不是深色系图片。当您的APP启动图右上角像素点不是明显的深色RGB值时框架可能会判断错误深色
+ 图片而导致启动图的修改失败，如果不幸发生了上述情况，您可以实现此Block来修改它的校验规则。
+ 
+ 
+ 我尝试过各种方法来希望能自动判断深色图片，包括介不限于将图片压缩成1×1像素单位，然后对其取色进行判断。
+ 但是都失败了，最后尝试了很多种方案发现还是目前的方案比较稳妥，但是如果您的启动图右上角颜色比较深，那么
+ 可能会判断错误，导致启动图的修改失败。这时您就需要实现此Block来适配(如果您有更好的想法可以在github上留言或者邮箱联系我)。
+ 
+ @warnning 请尽量在`application: didFinishLaunchingWithOptions:`方法返回前实现它，否则可能无效。
  */
 @property (nonatomic, class, null_resettable) BOOL (^hasDarkImageBlock) (UIImage *image);
 
 
 /**
- 获取指定模式下的本地启动图(Get the local launch screen diagram in the specified mode)
-      
- 当您的APP不支持深色/横屏时，尝试获取启动图会返回nil。(When your APP does not support dark/horizontal launch screen, try to get the launch image and it will return nil)
+ 设置/获取系统启动图的备份路径
  
- @param launchImageType 需要获取的启动图类型(The type of launch image that needs to be obtained)
+ @warnning 请尽量在`application: didFinishLaunchingWithOptions:`方法返回前实现它，否则可能无效。
+ 
+ 如果已上线，建议不要再修改路径。如果一定要修改请将之前路径上的文件备份到新路径下，否则可能会
+ 导致用户更新版本后丢失上次设置的启动图信息。
  */
+@property (nonatomic, class, null_resettable) NSString *launchImageBackupPath;
+
+
+/**
+ 设置/获取替换启动图的备份路径
+ 
+ @warnning 请尽量在`application: didFinishLaunchingWithOptions:`方法返回前实现它，否则可能无效。
+ 
+ 如果已上线，建议不要再修改路径。如果一定要修改请将之前路径上的文件备份到新路径下，否则可能会
+ 导致用户更新版本后丢失上次设置的启动图信息。
+ */
+@property (nonatomic, class, null_resettable) NSString *replaceLaunchImageBackupPath;
+
+
+/// 获取指定模式下APP的启动图(获取不到会返回nil)
 + (nullable UIImage *)launchImageFromType:(LLLaunchImageType)launchImageType;
 
 
-/// 将所有启动图恢复为默认启动图(Restore all launch screen to the initial state)
+/// 将所有启动图恢复为默认启动图
 + (void)restoreAsBefore;
 
 
-/// 替换指定类型启动图(Replace the specified type of launch Image)
-/// @param replaceImage 需要写入的图片，nil表示恢复为默认启动图(image to be written, nil means to restore to the default launch image)
+/// 替换APP指定启动图
+/// @param replaceImage 需要写入的图片，nil表示恢复为默认启动图
 /// @param launchImageType _
-/// @param quality 图片压缩比例，默认为0.8(Image compression ratio, the default is 0.8)
-/// @param validationBlock 自定义校验回调，返回true表示替换，false表示不替换(Custom callback, return true to replace, false to not replace)
+/// @param quality 图片压缩比例，默认为0.8
+/// @param validationBlock 自定义校验回调，返回YES表示替换，NO表示不替换，默认返回YES
 + (BOOL)replaceLaunchImage:(nullable UIImage *)replaceImage
            launchImageType:(LLLaunchImageType)launchImageType
         compressionQuality:(CGFloat)quality
           validation:(BOOL (^ _Nullable) (UIImage *originImage, UIImage *replaceImage))validationBlock;
 
 
-/// 替换所有竖屏启动图(Replace all vertical launch Images)
+/// 替换所有竖屏启动图
 + (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage;
 
 
-/// 替换所有横屏启动图(Replace all horizontal launch Images)
+/// 替换所有横屏启动图
 + (void)replaceHorizontalLaunchImage:(nullable UIImage *)horizontalImage;
 
 @end

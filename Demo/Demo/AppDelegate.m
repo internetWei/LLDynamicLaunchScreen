@@ -9,6 +9,8 @@
 
 #import "ViewController.h"
 
+#import "LLDynamicLaunchScreen.h"
+
 @interface AppDelegate ()
 
 @end
@@ -28,6 +30,13 @@
         self.window.rootViewController = nav;
         [self.window makeKeyAndVisible];
     }
+    
+    // 修改启动图的备份路径
+    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"ZTY"];
+    NSString *rootPath = [libraryPath stringByAppendingPathComponent:@"ABC"];
+    LLDynamicLaunchScreen.launchImageBackupPath = rootPath;
+    NSString *rootPath2 = [libraryPath stringByAppendingPathComponent:@"CBA"];
+    LLDynamicLaunchScreen.replaceLaunchImageBackupPath = rootPath2;
     
     return YES;
 }
