@@ -67,11 +67,11 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 ==============
 如果你有更好的改进，please pull reqeust me
 
-如果你有任何更好的意见，请创建一个[issue](https://gitee.com/internetWei/lldynamic-launch-screen/issues)
+如果你有任何更好的意见，请创建一个[issue](https://github.com/internetWei/lldynamic-launch-screen/issues)
 
 或者直接联系作者`internetwei@foxmail.com`
 
-[LLDynamicLaunchScreen设计思路](https://internetwei.github.io/2021/03/02/LLDynamicLaunchScreen%20%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
+[LLDynamicLaunchScreen的设计思路](https://internetwei.github.io/2021/03/07/LLDynamicLaunchScreen%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
 
 更新记录
 ==============
