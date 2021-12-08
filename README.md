@@ -4,7 +4,10 @@ LLDynamicLaunchScreen
 
 自动修复iPhone启动图显示异常，1行代码修改任意启动图。
 
-[Swift版本](https://github.com/internetWei/LLaunchScreen)(建议使用OC版本，如果您是Swift工程，也可以使用该框架，Swift框架后续将不会再更新维护)
+(暂不支持iPad以及国际化多个启动页的APP，由于该框架使用人数较少，
+我不打算花费太多时间给它增加新的功能，如果以后有很多人使用的话我会重新给它
+增加新功能，只是不增加新功能并不是不维护，
+如果有问题可以在[issues](https://github.com/internetWei/LLDynamicLaunchScreen/issues)留言告诉我。)
 
 特性
 ==============
@@ -72,15 +75,6 @@ LLDynamicLaunchScreen.hasDarkImageBlock = ^BOOL(UIImage * _Nonnull image) {
 或者直接联系作者`internetwei@foxmail.com`
 
 [LLDynamicLaunchScreen的设计思路](https://internetwei.github.io/2021/03/07/LLDynamicLaunchScreen%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF/)
-
-更新记录
-==============
-- 0.2.2 将英文注释替换为了中文，增加了如下API:
-
-```
-1. launchImageBackupPath(用于自定义系统启动图的备份路径，方便开发人员管理工程的文件结构)。
-2. replaceLaunchImageBackupPath(用于自定义用户替换启动图的备份路径)。
-```
 
 许可证
 ==============
