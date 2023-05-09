@@ -3,7 +3,7 @@ name: LLDynamicLaunchScreen CI
 on: 
   push:
     branches: 
-      - dev
+      - ［dev]
   pull_request:
     branches: 
       - master
