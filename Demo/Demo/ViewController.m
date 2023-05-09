@@ -7,14 +7,20 @@
 
 #import "ViewController.h"
 
-#import <PhotosUI/PHPicker.h>
 #import "LLDynamicLaunchScreen.h"
+#import "Masonry.h"
+#import "UIView+HUD.h"
+#import "UIImage+Category.h"
+#import <CoreServices/CoreServices.h>
 
-@interface ViewController ()<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 
-@property (nonatomic, weak) UILabel *alertLabel;
+@interface ViewController ()<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic, weak) UIImageView *launchImageView;
+@property (nonatomic, weak) UIImageView *backgroundImageView;
+
+@property (nonatomic, strong) UIImagePickerController *pickerController;
+
+@property (nonatomic, assign) LLLaunchImageType selectType;
 
 @end
 
@@ -22,229 +28,334 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = UIColor.whiteColor;
+    
+    self.pickerController = [[UIImagePickerController alloc] init];
+    self.pickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    self.pickerController.delegate = self;
+    self.pickerController.mediaTypes = @[(NSString *)kUTTypeImage];
+    
+    BOOL isDarkMode = ({
+        BOOL isDarkMode = NO;
+        if (@available(iOS 12.0, *)) {
+            isDarkMode = (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark);
+        }
+        isDarkMode;
+    });
+    
+    BOOL isPortrait = CGRectGetWidth(self.view.bounds) < CGRectGetHeight(self.view.bounds);
+    
+    UIImageView *backgroundImageView = [[UIImageView alloc] init];
+    self.backgroundImageView = backgroundImageView;
+    backgroundImageView.contentMode = UIViewContentModeScaleToFill;
+    backgroundImageView.backgroundColor = UIColor.clearColor;
+    [self.view addSubview:backgroundImageView];
+    
+    if (isDarkMode) {
+        if (@available(iOS 13.0, *)) {
+            if (isPortrait) {
+                backgroundImageView.image = [LLDynamicLaunchScreen getLaunchImageWithType:LLLaunchImageTypeVerticalDark];
+            } else {
+                backgroundImageView.image = [LLDynamicLaunchScreen getLaunchImageWithType:LLLaunchImageTypeHorizontalDark].byRotateRight90;
+            }
+        }
+    } else {
+        if (isPortrait) {
+            backgroundImageView.image = [LLDynamicLaunchScreen getLaunchImageWithType:LLLaunchImageTypeVerticalLight];
+        } else {
+            backgroundImageView.image = [LLDynamicLaunchScreen getLaunchImageWithType:LLLaunchImageTypeHorizontalLight].byRotateRight90;
+        }
+    }
+
+    [backgroundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(0);
+    }];
+
+    UIView *contentView = [[UIView alloc] init];
+    contentView.backgroundColor = UIColor.clearColor;
+    [self.view addSubview:contentView];
+
+    [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view).inset(30.0);
+        make.centerY.mas_equalTo(0);
+    }];
+
+    CGFloat spacing = 30.0;
+
+    UIView *functionView1 = [self createViewWithTitle:@"修改启动图" tip:@"打开相册，选择你喜欢的图片并设置为启动图"];
+    [functionView1 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(function1Event)]];
+    [contentView addSubview:functionView1];
+
+    [functionView1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(60.0);
+    }];
+    
+    UIView *functionView2 = [self createViewWithTitle:@"随机启动图" tip:@"从网络上随机获取1张图片设置为启动图"];
+    [functionView2 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(function2Event)]];
+    [contentView addSubview:functionView2];
+
+    [functionView2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(functionView1.mas_bottom).offset(spacing);
+        make.left.right.mas_equalTo(0);
+        make.height.equalTo(functionView1);
+    }];
+
+    UIView *functionView3 = [self createViewWithTitle:@"还原启动图" tip:@"选择你要还原的启动图类型"];
+    [functionView3 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(function3Event)]];
+    [contentView addSubview:functionView3];
+
+    [functionView3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(functionView2.mas_bottom).offset(spacing);
+        make.left.right.mas_equalTo(0);
+        make.height.equalTo(functionView1);
+    }];
+
+    UIView *functionView4 = [self createViewWithTitle:@"获取启动图" tip:@"选择你要获取的启动图类型并设置成页面背景"];
+    [functionView4 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(function4Event)]];
+    [contentView addSubview:functionView4];
+
+    [functionView4 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(functionView3.mas_bottom).offset(spacing);
+        make.left.right.mas_equalTo(0);
+        make.height.equalTo(functionView1);
+    }];
+
+    UIView *functionView5 = [self createViewWithTitle:@"获取系统启动图" tip:@"选择你要获取的启动图类型并设置成页面背景"];
+    [functionView5 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(function5Event)]];
+    [contentView addSubview:functionView5];
+
+    [functionView5 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(functionView4.mas_bottom).offset(spacing);
+        make.left.right.mas_equalTo(0);
+        make.height.equalTo(functionView1);
+        make.bottom.mas_equalTo(0);
+    }];
+}
+
+- (UIView *)createViewWithTitle:(NSString *)title tip:(NSString *)tip {
+    UIView *contentView = [[UIView alloc] init];
+    contentView.backgroundColor = [UIColor colorWithRed:229.0 / 255.0 green:125.0 / 255.0 blue:34.0 / 255.0 alpha:0.85];
+    contentView.layer.cornerRadius = 6.0;
+    
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = title;
+    titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    titleLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.87];
+    [contentView addSubview:titleLabel];
+    
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(5.0);
+        make.left.mas_equalTo(10.0);
+    }];
+    
+    
+    UILabel *tipsLabel = [[UILabel alloc] init];
+    tipsLabel.text = tip;
+    tipsLabel.font = [UIFont systemFontOfSize:14.0];
+    tipsLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.6];
+    [tipsLabel sizeToFit];
+    [contentView addSubview:tipsLabel];
+    
+    [tipsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-10.0);
+        make.bottom.mas_equalTo(-5.0);
+    }];
+    
+    return contentView;
+}
+
+
+- (void)function1Event {
+    [self showAlertViewWithTitle:@"请选择你要修改的启动图类型" handler:^(LLLaunchImageType type) {
+        self.selectType = type;
+        [self presentViewController:self.pickerController animated:YES completion:nil];
+    }];
+}
+
+
+- (void)function2Event {
+    NSInteger width = CGRectGetWidth(self.view.bounds);
+    NSInteger height = CGRectGetHeight(self.view.bounds);
+    
+    [self showAlertViewWithTitle:@"请选择你要修改的启动图类型" handler:^(LLLaunchImageType type) {
+        NSString *url = nil;
+        BOOL isVertical = NO;
+        switch (type) {
+            case LLLaunchImageTypeVerticalLight:
+            case LLLaunchImageTypeVerticalDark: {
+                url = [NSString stringWithFormat:@"https://picsum.photos/%ld/%ld", width, height];
+                isVertical = YES;
+            } break;
+            case LLLaunchImageTypeHorizontalLight:
+            case LLLaunchImageTypeHorizontalDark: {
+                url = [NSString stringWithFormat:@"https://picsum.photos/%ld/%ld", height, width];
+                isVertical = NO;
+            } break;
+        }
         
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-    scrollView.frame = self.view.bounds;
-    [self.view addSubview:scrollView];
-    
-    self.navigationItem.title = @"LLLaunchScreen";
-    
-    CGFloat screenWidth = UIScreen.mainScreen.bounds.size.width;
-    CGFloat screenHeight = UIScreen.mainScreen.bounds.size.height;
-    
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:@"选择相片" forState:UIControlStateNormal];
-    [button setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    button.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
-    [scrollView addSubview:button];
-    button.frame = CGRectMake((screenWidth - 220) / 2.0, 100, 220, 80);
-    [button addTarget:self action:@selector(buttonEvent) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button1 setTitle:@"恢复如初" forState:UIControlStateNormal];
-    [button1 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    button1.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
-    [scrollView addSubview:button1];
-    button1.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button.frame) + 40.0, 220, 80);
-    [button1 addTarget:self action:@selector(button1Event) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button2 setTitle:@"恢复指定启动图" forState:UIControlStateNormal];
-    [button2 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    button2.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
-    button2.titleLabel.numberOfLines = 2;
-    [scrollView addSubview:button2];
-    button2.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button1.frame) + 40.0, 220, 80);
-    [button2 addTarget:self action:@selector(button2Event) forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button3 setTitle:@"获取指定启动图" forState:UIControlStateNormal];
-    [button3 setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    button3.backgroundColor = [UIColor colorWithRed:14.0 / 255.0 green:144.0 / 255.0 blue:1.0 alpha:1.0];
-    button3.titleLabel.numberOfLines = 2;
-    [scrollView addSubview:button3];
-    button3.frame = CGRectMake((screenWidth - 220) / 2.0, CGRectGetMaxY(button2.frame) + 40.0, 220, 80);
-    [button3 addTarget:self action:@selector(button3Event) forControlEvents:UIControlEventTouchUpInside];
-    
-    scrollView.contentSize = CGSizeMake(screenWidth, CGRectGetMaxY(button3.frame) + 20);
-    
-    UILabel *alertLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
-    self.alertLabel = alertLabel;
-    alertLabel.center = self.view.center;
-    alertLabel.textAlignment = NSTextAlignmentCenter;
-    alertLabel.backgroundColor = [UIColor blackColor];
-    alertLabel.textColor = [UIColor whiteColor];
-    alertLabel.layer.cornerRadius = 5.0;
-    alertLabel.layer.masksToBounds = YES;
-    alertLabel.numberOfLines = 0;
-    [self.view addSubview:alertLabel];
-    alertLabel.hidden = YES;
-    
-    UIImageView *launchImageView = [[UIImageView alloc] init];
-    self.launchImageView = launchImageView;
-    launchImageView.contentMode = UIViewContentModeScaleAspectFit;
-    launchImageView.frame = CGRectMake(0, 0, screenWidth - 40, screenHeight - 150);
-    launchImageView.hidden = YES;
-    launchImageView.center = self.view.center;
-    launchImageView.userInteractionEnabled = YES;
-    [launchImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideLaunchImageView)]];
-    [self.view addSubview:launchImageView];
+        [self getNetworkImageFromUrl:url handler:^(UIImage *image) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                BOOL result = [LLDynamicLaunchScreen replaceLaunchImage:image type:type];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (result) {
+                        if (isVertical) {
+                            self.backgroundImageView.image = image;
+                        } else {
+                            self.backgroundImageView.image = image.byRotateRight90;
+                        }
+                        [self success];
+                    } else {
+                        [self.view showPromptFromText:@"图片获取失败，请稍候再试"];
+                    }
+                });
+            });
+        }];
+    }];
 }
 
-- (void)buttonEvent {
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    [self presentViewController:picker animated:YES completion:nil];
-}
 
-- (void)button1Event {
-    [LLDynamicLaunchScreen restoreAsBefore];
+- (void)getNetworkImageFromUrl:(NSString *)url handler:(void(^)(UIImage *image))handler {
+    MBProgressHUD *hud = [self.view showLoading];
     
-    [self showAlertView:@"修改成功，APP即将退出"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        UIImage *image = [UIImage imageWithData:data scale:UIScreen.mainScreen.scale];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hideAnimated:YES];
+            if (image == nil) {
+                [self.view showPromptFromText:@"图片获取失败，请稍候重试"];
+            } else {
+                !handler ?: handler(image);
+            }
+        });
+    });
 }
 
-- (void)button2Event {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选择图片类型" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+- (void)function3Event {
+    [self showAlertViewWithTitle:@"请选择你要还原的启动图类型" handler:^(LLLaunchImageType type) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            BOOL result = [LLDynamicLaunchScreen replaceLaunchImage:nil type:type];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (result) {
+                    [self success];
+                } else {
+                    [self.view showPromptFromText:@"操作失败，请联系作者:internetwei@foxmail.com"];
+                }
+            });
+        });
+    }];
+}
+
+
+- (void)function4Event {
+    [self showAlertViewWithTitle:@"请选择你要获取的启动图类型" handler:^(LLLaunchImageType type) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            UIImage *image = [LLDynamicLaunchScreen getLaunchImageWithType:type];
+            switch (type) {
+                case LLLaunchImageTypeHorizontalLight:
+                case LLLaunchImageTypeHorizontalDark: {
+                    image = image.byRotateRight90;
+                }
+                default: break;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.backgroundImageView.image = image;
+            });
+        });
+    }];
+}
+
+
+- (void)function5Event {
+    [self showAlertViewWithTitle:@"请选择你要获取的启动图类型" handler:^(LLLaunchImageType type) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            UIImage *image = [LLDynamicLaunchScreen getSystemLaunchImageWithType:type];
+            switch (type) {
+                case LLLaunchImageTypeHorizontalLight:
+                case LLLaunchImageTypeHorizontalDark: {
+                    image = image.byRotateRight90;
+                }
+                default: break;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.backgroundImageView.image = image;
+            });
+        });
+    }];
+}
+
+
+- (void)showAlertViewWithTitle:(NSString *)title handler:(void (^)(LLLaunchImageType type))handler {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"竖屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
-        [self showAlertView:@"修改成功，APP即将退出"];
+        !handler ?: handler(LLLaunchImageTypeVerticalLight);
     }];
     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"横屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
-        [self showAlertView:@"修改成功，APP即将退出"];
+        !handler ?: handler(LLLaunchImageTypeHorizontalLight);
     }];
-    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"竖屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (@available(iOS 13.0, *)) {
-            [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"修改成功，APP即将退出"];
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-            [alert addAction:cancelAction];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }];
-    UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"横屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (@available(iOS 13.0, *)) {
-            [LLDynamicLaunchScreen replaceLaunchImage:nil launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"修改成功，APP即将退出"];
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-            [alert addAction:cancelAction];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
     [alert addAction:action1];
     [alert addAction:action2];
-    [alert addAction:action3];
-    [alert addAction:action4];
-    [alert addAction:cancel];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id> *)info {
     
-    UIImage *selectedImage = info[UIImagePickerControllerOriginalImage];
-    [picker dismissViewControllerAnimated:YES completion:^{
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选择图片类型" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"竖屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeVerticalLight compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"修改成功，APP即将退出"];
-        }];
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"横屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeHorizontalLight compressionQuality:0.8 validation:nil];
-            [self showAlertView:@"修改成功，APP即将退出"];
-        }];
+    if (@available(iOS 13.0, *)) {
         UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"竖屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            if (@available(iOS 13.0, *)) {
-                [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeVerticalDark compressionQuality:0.8 validation:nil];
-                [self showAlertView:@"修改成功，APP即将退出"];
-            } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-                [alert addAction:cancelAction];
-                [self presentViewController:alert animated:YES completion:nil];
-            }
+            !handler ?: handler(LLLaunchImageTypeVerticalDark);
         }];
         UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"横屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            if (@available(iOS 13.0, *)) {
-                [LLDynamicLaunchScreen replaceLaunchImage:selectedImage launchImageType:LLLaunchImageTypeHorizontalDark compressionQuality:0.8 validation:nil];
-                [self showAlertView:@"修改成功，APP即将退出"];
-            } else {
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-                [alert addAction:cancelAction];
-                [self presentViewController:alert animated:YES completion:nil];
-            }
+            !handler ?: handler(LLLaunchImageTypeHorizontalDark);
         }];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:action1];
-        [alert addAction:action2];
+        
         [alert addAction:action3];
         [alert addAction:action4];
-        [alert addAction:cancel];
-        [self presentViewController:alert animated:YES completion:nil];
-    }];
-}
+    }
 
-- (void)button3Event {
-    __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"选择图片类型" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"竖屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIImage *image = [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalLight];
-        weakSelf.launchImageView.image = image;
-        weakSelf.launchImageView.hidden = NO;
-    }];
-    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"横屏浅色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UIImage *image = [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeHorizontalLight];
-        weakSelf.launchImageView.image = image;
-        weakSelf.launchImageView.hidden = NO;
-    }];
-    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"竖屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (@available(iOS 13.0, *)) {
-            UIImage *image = [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeVerticalDark];
-            weakSelf.launchImageView.image = image;
-            weakSelf.launchImageView.hidden = NO;
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-            [alert addAction:cancelAction];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }];
-    UIAlertAction *action4 = [UIAlertAction actionWithTitle:@"横屏深色启动图" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (@available(iOS 13.0, *)) {
-            UIImage *image = [LLDynamicLaunchScreen launchImageFromType:LLLaunchImageTypeHorizontalDark];
-            weakSelf.launchImageView.image = image;
-            weakSelf.launchImageView.hidden = NO;
-        } else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"该功能仅支持iOS13及以上系统使用" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
-            [alert addAction:cancelAction];
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-    [alert addAction:action1];
-    [alert addAction:action2];
-    [alert addAction:action3];
-    [alert addAction:action4];
-    [alert addAction:cancel];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+    
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)hideLaunchImageView {
-    self.launchImageView.hidden = YES;
+
+- (void)success {
+    __block NSInteger count = 3;
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.userInteractionEnabled = NO;
+    hud.mode = MBProgressHUDModeText;
+    hud.label.text = [NSString stringWithFormat:@"操作成功，APP将在%ld秒后退出", count];
+    hud.label.numberOfLines = 0;
+    hud.label.font = [UIFont fontWithName:@"Helvetica" size:15.0];
+    [hud showAnimated:YES];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1.0 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        count -= 1;
+        if (count == 0) { exit(0); }
+        hud.label.text = [NSString stringWithFormat:@"操作成功，APP将在%ld秒后退出", count];
+    }];
+    [NSRunLoop.currentRunLoop addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
-- (void)showAlertView:(NSString *)text {
-    self.alertLabel.text = text;
-    self.alertLabel.hidden = NO;
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        exit(0);
+#pragma mark - UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey,id> *)info {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
+    if (image == nil) {
+        [self.view showPromptFromText:@"这张图片有问题，请换一张"];
+        return;
+    }
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        BOOL result = [LLDynamicLaunchScreen replaceLaunchImage:image type:self.selectType];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (result) {
+                [self success];
+            } else {
+                [self.view showPromptFromText:@"操作失败，请联系作者:internetwei@foxmail.com"];
+            }
+        });
     });
 }
 

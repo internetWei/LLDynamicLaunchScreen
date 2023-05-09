@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6A434E0D25BC6638008EE8BC /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A434E0B25BC6638008EE8BC /* LLDynamicLaunchScreen.m */; };
-		6A434E0E25BC6638008EE8BC /* LLDynamicLaunchScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A434E0C25BC6638008EE8BC /* LLDynamicLaunchScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		76D520A72A09CB2F00983DFE /* LLDynamicLaunchScreen.h in Headers */ = {isa = PBXBuildFile; fileRef = 76D520A32A09CB2F00983DFE /* LLDynamicLaunchScreen.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		76D520A82A09CB2F00983DFE /* LLDynamicLaunchScreen+LLPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D520A42A09CB2F00983DFE /* LLDynamicLaunchScreen+LLPrivate.m */; };
+		76D520A92A09CB2F00983DFE /* LLDynamicLaunchScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D520A52A09CB2F00983DFE /* LLDynamicLaunchScreen.m */; };
+		76D520AA2A09CB2F00983DFE /* UIImage+LLPrivate.m in Sources */ = {isa = PBXBuildFile; fileRef = 76D520A62A09CB2F00983DFE /* UIImage+LLPrivate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6A434DD525BC6171008EE8BC /* LLDynamicLaunchScreen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LLDynamicLaunchScreen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A434E0B25BC6638008EE8BC /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
-		6A434E0C25BC6638008EE8BC /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
 		6A434E2625BC692B008EE8BC /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		76D520A32A09CB2F00983DFE /* LLDynamicLaunchScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLDynamicLaunchScreen.h; sourceTree = "<group>"; };
+		76D520A42A09CB2F00983DFE /* LLDynamicLaunchScreen+LLPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "LLDynamicLaunchScreen+LLPrivate.m"; sourceTree = "<group>"; };
+		76D520A52A09CB2F00983DFE /* LLDynamicLaunchScreen.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLDynamicLaunchScreen.m; sourceTree = "<group>"; };
+		76D520A62A09CB2F00983DFE /* UIImage+LLPrivate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+LLPrivate.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,8 +53,10 @@
 		6A434E0A25BC6638008EE8BC /* LLDynamicLaunchScreen */ = {
 			isa = PBXGroup;
 			children = (
-				6A434E0C25BC6638008EE8BC /* LLDynamicLaunchScreen.h */,
-				6A434E0B25BC6638008EE8BC /* LLDynamicLaunchScreen.m */,
+				76D520A32A09CB2F00983DFE /* LLDynamicLaunchScreen.h */,
+				76D520A52A09CB2F00983DFE /* LLDynamicLaunchScreen.m */,
+				76D520A42A09CB2F00983DFE /* LLDynamicLaunchScreen+LLPrivate.m */,
+				76D520A62A09CB2F00983DFE /* UIImage+LLPrivate.m */,
 			);
 			name = LLDynamicLaunchScreen;
 			path = ../LLDynamicLaunchScreen;
@@ -71,7 +77,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A434E0E25BC6638008EE8BC /* LLDynamicLaunchScreen.h in Headers */,
+				76D520A72A09CB2F00983DFE /* LLDynamicLaunchScreen.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,7 +148,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A434E0D25BC6638008EE8BC /* LLDynamicLaunchScreen.m in Sources */,
+				76D520A92A09CB2F00983DFE /* LLDynamicLaunchScreen.m in Sources */,
+				76D520AA2A09CB2F00983DFE /* UIImage+LLPrivate.m in Sources */,
+				76D520A82A09CB2F00983DFE /* LLDynamicLaunchScreen+LLPrivate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +288,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,7 +315,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

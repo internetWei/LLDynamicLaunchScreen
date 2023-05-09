@@ -9,36 +9,28 @@
 
 #import "ViewController.h"
 
-#import "LLDynamicLaunchScreen.h"
-
-@interface AppDelegate ()
-
-@end
-
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSLog(@"沙盒路径:%@", NSHomeDirectory());
-    sleep(2);
-    if (@available(iOS 13.0, *)) {} else {
-        self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
-        self.window.backgroundColor = [UIColor whiteColor];
-        
-        ViewController * vc = [[ViewController alloc] init];
-        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-        self.window.rootViewController = nav;
-        [self.window makeKeyAndVisible];
+#if TARGET_IPHONE_SIMULATOR
+    NSLog(@"沙盒路径:%@/Library/SplashBoard/Snapshots/%@ - {DEFAULT GROUP}/", NSHomeDirectory(), NSBundle.mainBundle.bundleIdentifier);
+#endif
+    
+    // 如果不是由XCTest启动。
+    if (!NSProcessInfo.processInfo.environment[@"XCTestBundlePath"]) {
+        sleep(3);
     }
     
-    // 修改启动图的备份路径
-    NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES).firstObject stringByAppendingPathComponent:@"ZTY"];
-    NSString *rootPath = [libraryPath stringByAppendingPathComponent:@"ABC"];
-    LLDynamicLaunchScreen.launchImageBackupPath = rootPath;
-    NSString *rootPath2 = [libraryPath stringByAppendingPathComponent:@"CBA"];
-    LLDynamicLaunchScreen.replaceLaunchImageBackupPath = rootPath2;
+    self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    [self.window makeKeyAndVisible];
+    self.window.rootViewController = [[ViewController alloc] init];
     
     return YES;
+}
+
+
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    return UIInterfaceOrientationMaskPortrait;
 }
 
 @end
