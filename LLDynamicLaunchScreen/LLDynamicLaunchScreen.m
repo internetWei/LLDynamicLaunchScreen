@@ -7,11 +7,6 @@
 
 #import "LLDynamicLaunchScreen.h"
 
-double LLDynamicLaunchScreenVersionNumber = 1.0;
-
-const unsigned char LLDynamicLaunchScreenVersionString[] = "1.0.0";
-
-
 @interface LLDynamicLaunchScreen (LLPrivate)
 
 /// 操作启动图文件夹。
@@ -67,9 +62,7 @@ const unsigned char LLDynamicLaunchScreenVersionString[] = "1.0.0";
 }
 
 
-+ (NSString *)version {
-    return [NSString stringWithFormat:@"%s", LLDynamicLaunchScreenVersionString];
-}
++ (NSString *)version { return @"1.0.0"; }
 
 
 + (void)setReplaceLaunchImageBackupPath:(NSString *)backupPath {
