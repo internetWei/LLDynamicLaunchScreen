@@ -14,7 +14,7 @@ __LLDynamicLaunchScreen__ 是1个专注于解决iOS上各种启动图问题的�
 ==============
 | 修改启动图  | 自动修复异常 |
 | :-------------: | :-------------: |
-| ![demo1](Resources/demo1.gif)  | ![demo2](Resources/demo2.gif)  |
+| ![demo1](https://github.com/internetWei/LLDynamicLaunchScreen/blob/bf2e322e020c342a3bce91ff8dc65a6bf04846ae/Resources/demo1.gif?raw=true)  | ![demo2](https://github.com/internetWei/LLDynamicLaunchScreen/blob/bf2e322e020c342a3bce91ff8dc65a6bf04846ae/Resources/demo2.gif?raw=true)  |
 
 示例代码
 ==============
