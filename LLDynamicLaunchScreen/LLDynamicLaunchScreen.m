@@ -62,7 +62,10 @@
 }
 
 
-+ (NSString *)version { return @"1.0.2"; }
++ (NSString *)versionString { return @"1.0.2"; }
+
+
++ (CGFloat)versionNumber { return 1.0;}
 
 
 + (void)setReplaceLaunchImageBackupPath:(NSString *)backupPath {

@@ -19,8 +19,12 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
 
 @interface LLDynamicLaunchScreen : NSObject
 
-/// 返回框架当前版本号，例如：@"1.0.0"。
-@property (class, readonly) NSString *version;
+/// 返回框架当前版本号字符串，例如：@"1.0.0"。
+@property (class, readonly) NSString *versionString;
+
+
+/// 返回框架当前版本号数字，例如：1.0。
+@property (class, readonly) CGFloat versionNumber;
 
 
 /// 为了提高框架稳定性和API整洁度，该属性将在未来版本中移除。
