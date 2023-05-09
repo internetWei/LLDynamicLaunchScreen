@@ -17,4 +17,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: iOS
-        run: cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.3'
+        run: cd Demo && xcodebuild test -scheme Demo -target Demo -destination 'platform=iOS Simulator,name=iPhone 14,OS=16.2'
