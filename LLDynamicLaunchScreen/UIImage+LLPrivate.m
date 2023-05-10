@@ -90,6 +90,7 @@ FOUNDATION_STATIC_INLINE BOOL colorEqualColor(LLColor color1, LLColor color2) {
         UIImage *bigImage = scale1 > scale2 ? self : image;
         UIImage *smallImage = scale1 < scale2 ? self : image;
         
+        bigImage = [bigImage ll_resizeScale:1.0];
         image1 = [bigImage ll_imageByResizeToSize:scale1 < scale2 ? size1 : size2 contentMode:UIViewContentModeScaleToFill];
         image2 = smallImage;
     }

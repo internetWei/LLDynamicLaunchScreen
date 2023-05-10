@@ -76,7 +76,16 @@ FOUNDATION_STATIC_INLINE NSString * imageCaptionForType(LLLaunchImageType type) 
     self.defaultText = [NSString stringWithFormat:@"iOS %@ 版本的 '%@' 机型: ", UIDevice.currentDevice.systemVersion, model];
     self.launchImagePath = [LLDynamicLaunchScreen ll_getLaunchImagePath];
     
-    [LLDynamicLaunchScreen restoreAsBefore];
+    // 还原所有修改过的启动图。
+    {
+        [LLDynamicLaunchScreen replaceLaunchImage:nil type:LLLaunchImageTypeVerticalLight];
+        [LLDynamicLaunchScreen replaceLaunchImage:nil type:LLLaunchImageTypeHorizontalLight];
+        
+        if (@available(iOS 13.0, *)) {
+            [LLDynamicLaunchScreen replaceLaunchImage:nil type:LLLaunchImageTypeVerticalDark];
+            [LLDynamicLaunchScreen replaceLaunchImage:nil type:LLLaunchImageTypeHorizontalDark];
+        }
+    }
 }
 
 
