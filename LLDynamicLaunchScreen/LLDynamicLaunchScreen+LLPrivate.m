@@ -53,7 +53,8 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 + (void)ll_checkLaunchImage {
     NSString *oldAppVersion = [self ll_getUserDefaultsWithKey:@"app_version_check"];
-    NSString *appVersion = [NSString stringWithFormat:@"%@_check", NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]];
+    NSString *appVersion = [NSString stringWithFormat:@"%@_check", [self ll_getAPPInfoForKey:@"CFBundleShortVersionString"]];
+    
     if ([oldAppVersion isEqualToString:appVersion]) { return; }
     
     // 记一下哪些图片已经被修改过，修改过的图片不用修复。
@@ -573,7 +574,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 
 + (nullable UIViewController *)ll_getLaunchScreenViewController {
-    NSString *launchStoryboardName = NSBundle.mainBundle.infoDictionary[@"UILaunchStoryboardName"];
+    NSString *launchStoryboardName = [self ll_getAPPInfoForKey:@"UILaunchStoryboardName"];
     launchStoryboardName = [launchStoryboardName stringByDeletingPathExtension];
     if (launchStoryboardName == nil) { return nil; }
     
@@ -630,8 +631,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 
 + (BOOL)ll_supportVertical {
-    NSDictionary *info = NSBundle.mainBundle.infoDictionary;
-    NSArray<NSString *> *orientations = info[@"UISupportedInterfaceOrientations"];
+    NSArray<NSString *> *orientations = [self ll_getAPPInfoForKey:@"UISupportedInterfaceOrientations"];
     if (orientations.count == 0) { return YES; }
     
     if ([orientations containsObject:@"UIInterfaceOrientationPortrait"] ||
@@ -644,8 +644,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 
 + (BOOL)ll_supportHorizontal {
-    NSDictionary *info = NSBundle.mainBundle.infoDictionary;
-    NSArray<NSString *> *orientations = info[@"UISupportedInterfaceOrientations"];
+    NSArray<NSString *> *orientations = [self ll_getAPPInfoForKey:@"UISupportedInterfaceOrientations"];
     if (orientations.count == 0) { return NO; }
     
     if ([orientations containsObject:@"UIInterfaceOrientationLandscapeLeft"] ||
@@ -660,8 +659,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 /// 0: 跟随系统，1：强制浅色，2：强制深色。
 + (NSInteger)ll_getUserInterfaceStyle {
     if (@available(iOS 13.0, *)) {
-        NSDictionary *info = NSBundle.mainBundle.infoDictionary;
-        NSString *style = info[@"UIUserInterfaceStyle"];
+        NSString *style = [self ll_getAPPInfoForKey:@"UIUserInterfaceStyle"];
         if (style == nil) { return 0; }
         if ([style isEqualToString:@"Automatic"]) { return 0; }
         if ([style isEqualToString:@"Light"]) { return 1; }
@@ -669,6 +667,14 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
     }
     
     return 1;
+}
+
+
++ (nullable id)ll_getAPPInfoForKey:(NSString *)aKey {
+    id aValue = NSBundle.mainBundle.localizedInfoDictionary[aKey];
+    if (aValue) { return aValue; }
+    
+    return NSBundle.mainBundle.infoDictionary[aKey];
 }
 
 

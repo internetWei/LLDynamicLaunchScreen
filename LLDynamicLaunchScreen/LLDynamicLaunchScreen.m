@@ -48,6 +48,9 @@
 /// 检查启动图。
 + (void)ll_checkLaunchImage;
 
+
++ (nullable id)ll_getAPPInfoForKey:(NSString *)aKey;
+
 @end
 
 
@@ -86,7 +89,7 @@ static BOOL (^_migrationHandler)(LLLaunchImageType, UIImage * _Nonnull);
 + (BOOL (^)(LLLaunchImageType, UIImage * _Nonnull))migrationHandler { return _migrationHandler; }
 
 
-#define APPVERSION NSBundle.mainBundle.infoDictionary[@"CFBundleShortVersionString"]
+#define APPVERSION [self ll_getAPPInfoForKey:@"CFBundleShortVersionString"]
 + (nullable UIImage *)getSystemLaunchImageWithType:(LLLaunchImageType)type {
     // 看一下本地缓存是否有之前生成好的启动图，如果有的话就直接返回。
     NSString *suffix = [NSString stringWithFormat:@"%@_%@", [self ll_getEnumName:type], APPVERSION];
