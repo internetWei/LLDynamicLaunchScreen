@@ -4,6 +4,8 @@ LLDynamicLaunchScreen
 
 __LLDynamicLaunchScreen__ 是1个专注于解决iOS上启动图各种问题的框架，它仅有 __78kb__，但这并不影响它的强大(`这绝对是你在iOS平台上能找到的最好的启动图的解决方案`)。
 
+该框架目前没有使用 swift 进行重写的计划，因为它可以和 swift 混编，而且，如果使用 swift 开发的话，由于swift没有load方法，有些逻辑会需要开发者手动调用，当然这都是后话，如果你想在 swift 上使用 swift 开发的这款框架的话，你可以创建 [issue](https://github.com/internetWei/lldynamic-launch-screen/issues) 或直接通过邮箱告诉我：`internetwei@foxmail.com`，如果人数很多的话我会考虑开发1个swift版本。
+
 特性
 ==============
 
