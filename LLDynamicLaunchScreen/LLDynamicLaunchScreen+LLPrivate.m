@@ -7,6 +7,8 @@
 
 #import "LLDynamicLaunchScreen.h"
 
+#import <pthread.h>
+
 /// 获取两个颜色之间的差异程度，0表示相同，值越大表示差距越大，例如纯白和纯黑会返回 86，如果遇到异常情况（例如传进来的 color 为 nil，则会返回 CGFLOAT_MAX）。
 ///
 /// 原理是将两个颜色摆放在 HSB(HSV) 模型内，取两个点之间的距离。由于 HSB(HSV) 没有 alpha 的概念，所以色值相同半透明程度不同的两个颜色会返回 0，也即相等。
@@ -372,13 +374,13 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 
 + (nullable NSError *)ll_operateOnTheLaunchImageFolder:(NSError * (^ NS_NOESCAPE)(NSString *path))block {
-    static dispatch_semaphore_t _lock;
+    static pthread_mutex_t _lock;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _lock = dispatch_semaphore_create(1);
+        pthread_mutex_init(&_lock, NULL);
     });
     
-    dispatch_semaphore_wait(_lock, DISPATCH_TIME_FOREVER);
+    pthread_mutex_lock(&_lock);
     
     NSString *launchImagePath = [self ll_getLaunchImagePath];
     NSString *tmpPath = launchImagePath;
@@ -390,7 +392,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
             [NSFileManager.defaultManager removeItemAtPath:tmpPath error:nil];
         }
         if (![NSFileManager.defaultManager moveItemAtPath:launchImagePath toPath:tmpPath error:nil]) {
-            dispatch_semaphore_signal(_lock);
+            pthread_mutex_unlock(&_lock);
             return [NSError errorWithDomain:@"budo.lldynamiclaunchscreen.com" code:-1 userInfo:@{NSLocalizedFailureReasonErrorKey : @"无法获取系统启动图，请联系作者:internetwei@foxmail.com"}];
         }
     }
@@ -401,7 +403,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
         [NSFileManager.defaultManager moveItemAtPath:tmpPath toPath:launchImagePath error:nil];
     }
     
-    dispatch_semaphore_signal(_lock);
+    pthread_mutex_unlock(&_lock);
     
     return error;
 }
