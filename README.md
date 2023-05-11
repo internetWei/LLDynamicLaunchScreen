@@ -1,14 +1,15 @@
 LLDynamicLaunchScreen
 ==============
-[![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-green)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.2-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![blog](https://img.shields.io/badge/blog-buDo-blue)](https://juejin.cn/user/2418581312385288/posts)
+[![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-brightgreen)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.2-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![blog](https://img.shields.io/badge/blog-buDo-blue)](https://juejin.cn/user/2418581312385288/posts)
 
 __LLDynamicLaunchScreen__ 是1个专注于解决iOS上启动图各种问题的框架，它仅有 __78kb__，但这并不影响它的强大(`这绝对是你在iOS平台上能找到的最好的启动图的解决方案`)。
 
 特性
 ==============
 
-- 自动修复启动图显示异常。
-- 不更新APP修改启动图(`支持从网络上下载图片`)。
+- 不用更新APP也能修改启动图(`支持从网络下载图片`)。
+- 自动修复启动图显示黑屏或白屏。
+- 自动修复启动图在横屏状态下可能显示异常。
 
 演示
 ==============
@@ -30,11 +31,6 @@ __LLDynamicLaunchScreen__ 是1个专注于解决iOS上启动图各种问题的�
 LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, completed: nil)
 ```
 
-系统要求
-==============
-
-只要你的项目启动图使用的是 `storyboard` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你需要在低于iOS11.0的版本上使用，可以联系我：`internetwei@foxmail.com`。
-
 安装
 ==============
 
@@ -53,19 +49,24 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 2. 将LLDynamicLaunchScreen文件夹添加(拖放)到你的工程。
 3. `#import "LLDynamicLaunchScreen.h"`。
 
+版本限制
+==============
+
+只要你的项目启动图使用的是 `LaunchScreen` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你在低于iOS11.0的版本上使用并遇到了问题，可以联系我：`internetwei@foxmail.com`。
+
 注意事项
 ==============
 
-* APP首次打开时(`更新APP后首次打开也算`)，会显示你在 storyboard 文件中配置的启动图，这是系统限制，暂无办法解决。
+如果你在项目中使用了1整张图片适配启动图(`或者大于屏幕90%区域`)的话，请你勿必在启动图文件的右下角添加1个1×1像素点的辅助视图，并将视图的背景设置成 system color，具体细节请看：[LLDynamicLaunchScreen 设计思路](https://juejin.cn/post/6913163202851241998) 中关于《修改启动图》的内容。
 
-作者
+支持
 ==============
 
 如果你有更好的改进，please pull reqeust me.
 
 如果你有任何更好的意见，请创建一个[issue](https://github.com/internetWei/lldynamic-launch-screen/issues)。
 
-或者直接联系作者`internetwei@foxmail.com`。
+如需支持，请发送电子邮件至 [internetwei@foxmail.com](internetwei@foxmail.com)。
 
 致谢
 ==============
@@ -76,4 +77,4 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 许可证
 ==============
 
-__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 LICENSE 文件。
+__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 [LICENSE](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/LICENSE) 文件。
