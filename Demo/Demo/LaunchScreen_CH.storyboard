@@ -22,12 +22,20 @@
                                 <fontDescription key="fontDescription" name="PartyLetPlain" family="Party LET" pointSize="50"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="简体中文" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PBn-dW-oFg">
+                                <rect key="frame" x="291" y="407.66666666666669" width="102" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="UJg-wk-gQE" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="IPr-bH-Uo4"/>
                             <constraint firstItem="UJg-wk-gQE" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="JcL-P2-0Lv"/>
+                            <constraint firstItem="PBn-dW-oFg" firstAttribute="top" secondItem="UJg-wk-gQE" secondAttribute="bottom" constant="10" id="Olm-Ei-Tqf"/>
+                            <constraint firstItem="PBn-dW-oFg" firstAttribute="trailing" secondItem="UJg-wk-gQE" secondAttribute="trailing" id="WHt-2D-yU9"/>
                         </constraints>
                     </view>
                 </viewController>
