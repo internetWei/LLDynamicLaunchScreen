@@ -1,17 +1,20 @@
 LLDynamicLaunchScreen
 ==============
-[![LLDynamicLaunchScreen CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/LICENSE)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-brightgreen)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.3-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-ios-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![blog](https://img.shields.io/badge/blog-buDo-blue)](https://juejin.cn/user/2418581312385288/posts)
+[![CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-brightgreen)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.4-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-iOS-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/LICENSE)
 
-__LLDynamicLaunchScreen__ 是1个专注于解决iOS上启动图各种问题的框架，它仅有 __78kb__，但这并不影响它的强大(`这绝对是你在iOS平台上能找到的最好的启动图的解决方案`)。
+__LLDynamicLaunchScreen__ 是1个可以让你不用更新APP并修改iPhone上的各种启动图；它还可以自动修复启动图的各种显示异常。
 
-该框架目前没有使用 swift 进行重写的计划，因为它可以和 swift 混编，而且，如果使用 swift 开发的话，由于swift没有load方法，有些逻辑会需要开发者手动调用，当然这都是后话，如果你想在 swift 上使用 swift 开发的这款框架的话，你可以创建 [issue](https://github.com/internetWei/lldynamic-launch-screen/issues) 或直接通过邮箱告诉我：`internetwei@foxmail.com`，如果人数很多的话我会考虑开发1个swift版本。
+> 该框架目前没有使用 swift 重写的计划，因为swift没有load方法，有些逻辑需要开发者手动调用，这可能会增加使用成本；当然，它支持和swift混编；如果你想作者提供1个swift版本的话，请在这个 [issues](https://github.com/internetWei/LLDynamicLaunchScreen/issues/18) 中留言。
 
-特性
+功能
 ==============
 
-- 不用更新APP也能修改启动图(`支持从网络下载图片`)。
-- 自动修复启动图显示黑屏或白屏。
+- 不更新APP修改启动图(`支持从网络下载图片`)。
+- 自动修复启动图黑屏/白屏。
 - 自动修复启动图在横屏状态下可能显示异常。
+- 更新APP版本后自动迁移上个版本数据，无需开发者手动处理。
+- 对迁移数据的精确控制，可控制哪张启动图需要迁移，哪张不需要。
+- 任何公开API均支持子线程调用，以提高性能。
 
 演示
 ==============
@@ -54,12 +57,12 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 版本限制
 ==============
 
-只要你的项目启动图使用的是 `LaunchScreen` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你在低于iOS11.0的版本上使用并遇到了问题，可以联系我：`internetwei@foxmail.com`。
+如果你的项目使用的是 `LaunchScreen` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你在低于iOS11.0的版本上使用并遇到了问题，请提交 [issues](https://github.com/internetWei/LLDynamicLaunchScreen/issues/new)。
 
 注意事项
 ==============
 
-如果你在项目中使用了1整张图片适配启动图(`或者大于屏幕90%区域`)的话，请你勿必在启动图文件的右下角添加1个1×1像素点的辅助视图，并将视图的背景设置成 system color，具体细节请看：[LLDynamicLaunchScreen 设计思路](https://juejin.cn/post/6913163202851241998) 中关于《修改启动图》的内容。
+如果你在项目中使用了1整张图片适配启动图(`或者大于屏幕90%区域`)的话，请你勿必在启动图的右下角添加1个1×1像素的辅助视图，并将视图的背景设置成 system color，具体细节请看：[LLDynamicLaunchScreen 设计思路](https://juejin.cn/post/6913163202851241998) 中关于《修改启动图》的内容。
 
 已知问题
 ==============
@@ -70,9 +73,7 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 支持
 ==============
 
-如果你有更好的改进，please pull reqeust me.
-
-如果你有任何更好的意见，请创建一个[issue](https://github.com/internetWei/lldynamic-launch-screen/issues)。
+如果你有任何更好的意见，请提交 [issue](https://github.com/internetWei/LLDynamicLaunchScreen/issues/new)。
 
 如需支持，请发送电子邮件至 [internetwei@foxmail.com](internetwei@foxmail.com)。
 
@@ -85,4 +86,4 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 许可证
 ==============
 
-__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 [LICENSE](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/LICENSE) 文件。
+__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 [LICENSE](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/LICENSE)。
