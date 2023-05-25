@@ -18,9 +18,9 @@ __LLDynamicLaunchScreen__ 是1个可以让你不用更新APP并修改iPhone上�
 
 演示
 ==============
-| 修改启动图  | 自动修复异常 | testImage |
-| :-------------: | :-------------: | :-------------: |
-| ![demo1](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/Resources/demo1.gif) | ![demo2](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/Resources/demo2.gif) | ![image](https://gitee.com/internetWei/upic/raw/main/LLDynamicLaunchScreen/demo1.gif) |
+| 修改启动图  | 自动修复异常 | testImage | testImage1 |
+| :-------------: | :-------------: | :-------------: | :-------------: |
+| ![demo1](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/Resources/demo1.gif) | ![demo2](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/Resources/demo2.gif) | ![image](https://gitee.com/internetWei/upic/raw/main/LLDynamicLaunchScreen/demo1.gif) | ![image1](https://gitee.com/internetWei/upic/raw/main/LLDynamicLaunchScreen/iShot_2023-05-08_21.54.38.png) |
 
 示例代码
 ==============
