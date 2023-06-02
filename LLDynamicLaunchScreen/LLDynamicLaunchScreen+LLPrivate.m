@@ -793,8 +793,8 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
     NSMutableArray *array = @[].mutableCopy;
     for (UIView *subView in view.subviews) {
         [array addObjectsFromArray:[self ll_getAllImageViewForView:subView]];
-        if (![subView isKindOfClass:[UIImageView class]]) continue;
         if (subView.isHidden) continue;
+        if (![subView isKindOfClass:[UIImageView class]]) continue;
         if (!((UIImageView *)subView).image) continue;
         [array addObject:subView];
     }
