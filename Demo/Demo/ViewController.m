@@ -142,7 +142,7 @@
     
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.text = title;
-    titleLabel.font = [UIFont boldSystemFontOfSize:17.0];
+    titleLabel.font = [UIFont boldSystemFontOfSize:CGRectGetWidth(UIScreen.mainScreen.bounds) * 0.043257];
     titleLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.87];
     [contentView addSubview:titleLabel];
     
@@ -154,12 +154,14 @@
     
     UILabel *tipsLabel = [[UILabel alloc] init];
     tipsLabel.text = tip;
-    tipsLabel.font = [UIFont systemFontOfSize:14.0];
+    tipsLabel.textAlignment = NSTextAlignmentRight;
+    tipsLabel.font = [UIFont boldSystemFontOfSize:CGRectGetWidth(UIScreen.mainScreen.bounds) * 0.03562341];
     tipsLabel.textColor = [UIColor colorWithRed:1 green:1 blue:1 alpha:0.6];
     [tipsLabel sizeToFit];
     [contentView addSubview:tipsLabel];
     
     [tipsLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(10.0);
         make.right.mas_equalTo(-10.0);
         make.bottom.mas_equalTo(-5.0);
     }];
