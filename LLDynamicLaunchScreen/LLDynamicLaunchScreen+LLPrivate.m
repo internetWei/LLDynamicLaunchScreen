@@ -738,17 +738,14 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 /// 获取UIView上关于UIImage的所有位置数据。
 + (NSArray<NSValue *> *)ll_imageInfoFromView:(UIView *)aView {
     NSMutableArray<NSValue *> *imageFrames = [NSMutableArray array];
-    for (UIImageView *imageView in aView.subviews) {
-        if (imageView.isHidden) { continue; }
-        if (![imageView isKindOfClass:UIImageView.class]) { continue; }
-        if (imageView.image == nil) { continue; }
-        
+    NSArray *imageViewArray = [self ll_getAllImageViewForView:aView];
+    for (UIImageView *imageView in imageViewArray) {
+        // 计算图片视图在启动屏中的坐标
+        CGRect imageViewFrame = [imageView convertRect:imageView.bounds toView:aView];
         // 计算image在imageView中的具体位置。
         CGRect imageRect = [imageView.image ll_CGRectWithContentMode:imageView.contentMode viewSize:imageView.bounds.size clipsToBounds:imageView.clipsToBounds];
-        
-        // 计算image在view中的具体位置。
-        CGFloat x = CGRectGetMinX(imageView.frame) + CGRectGetMinX(imageRect);
-        CGFloat y = CGRectGetMinY(imageView.frame) + CGRectGetMinY(imageRect);
+        CGFloat x = CGRectGetMinX(imageViewFrame) + CGRectGetMinX(imageRect);
+        CGFloat y = CGRectGetMinY(imageViewFrame) + CGRectGetMinY(imageRect);
         CGFloat width = CGRectGetWidth(imageRect);
         CGFloat height = CGRectGetHeight(imageRect);
         [imageFrames addObject:[NSValue valueWithCGRect:CGRectMake(x, y, width, height)]];
@@ -798,6 +795,19 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
     
     return isVertical ? verticalFrames : horizontalFrames;
 }
+
++ (NSArray <UIImageView *> *)ll_getAllImageViewForView:(UIView *)view {
+    NSMutableArray *array = @[].mutableCopy;
+    for (UIView *subView in view.subviews) {
+        [array addObjectsFromArray:[self ll_getAllImageViewForView:subView]];
+        if (subView.isHidden) continue;
+        if (![subView isKindOfClass:[UIImageView class]]) continue;
+        if (!((UIImageView *)subView).image) continue;
+        [array addObject:subView];
+    }
+    return array.copy;
+}
+
 
 @end
 
