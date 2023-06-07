@@ -65,7 +65,7 @@
 }
 
 
-+ (NSString *)versionString { return @"1.0.4"; }
++ (NSString *)versionString { return @"1.0.5"; }
 
 
 + (CGFloat)versionNumber { return 1.0;}
