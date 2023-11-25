@@ -54,6 +54,13 @@
 @end
 
 
+@interface UIImage (LLPrivate)
+
++ (nullable UIImage *)ll_snapshotImageForAView:(UIView *)aView;
+
+@end
+
+
 @implementation LLDynamicLaunchScreen
 
 + (void)load {
@@ -132,12 +139,7 @@ static BOOL (^_migrationHandler)(LLLaunchImageType, UIImage * _Nonnull);
             } break;
         }
         
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, UIScreen.mainScreen.scale);
-        [view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
-        UIImage *launchImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        return launchImage;
+        return [UIImage ll_snapshotImageForAView:view];
     };
     
     UIImage * (^saveImage)(UIImage *) = ^ UIImage * (UIImage *image) {

@@ -46,6 +46,9 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 /// 获取图片指定位置上的颜色。
 - (nullable UIColor *)ll_colorAtPoint:(CGPoint)point;
 
+
++ (nullable UIImage *)ll_snapshotImageForAView:(UIView *)aView;
+
 @end
 
 
@@ -365,12 +368,7 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 /// 对UIView指定区域进行截图。
 + (nullable UIImage *)ll_snapshotImageWithView:(UIView *)aView inRect:(CGRect)rect {
-    UIGraphicsBeginImageContextWithOptions(aView.bounds.size, aView.isOpaque, UIScreen.mainScreen.scale);
-    [aView drawViewHierarchyInRect:aView.bounds afterScreenUpdates:YES];
-    UIImage *wholeImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return [wholeImage ll_imageByCropToRect:rect];
+    return [[UIImage ll_snapshotImageForAView:aView] ll_imageByCropToRect:rect];
 }
 
 

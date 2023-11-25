@@ -38,25 +38,52 @@ FOUNDATION_STATIC_INLINE BOOL colorEqualColor(LLColor color1, LLColor color2) {
                                  contentMode:(UIViewContentMode)contentMode {
     if (size.width <= 0 || size.height <= 0) return nil;
     
-    UIGraphicsBeginImageContextWithOptions(size, self.ll_isOpaque, self.scale);
-    [self ll_drawInRect:(CGRect){.size = size} contentMode:contentMode];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
+    if (@available(iOS 17.0, *)) {
+        UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+        format.scale = self.scale;
+        format.opaque = self.ll_isOpaque;
+        UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:size format:format];
+        
+        return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+            [self ll_drawInRect:(CGRect){.size = size} contentMode:contentMode];
+        }];
+    } else {
+        UIGraphicsBeginImageContextWithOptions(size, self.ll_isOpaque, self.scale);
+        [self ll_drawInRect:(CGRect){.size = size} contentMode:contentMode];
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return image;
+    }
 }
 
 
 - (nullable UIImage *)ll_drawInRects:(NSArray<NSValue *> *)rects toColor:(UIColor *)color {
-    UIGraphicsBeginImageContextWithOptions(self.size, self.ll_isOpaque, self.scale);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [self drawInRect:(CGRect){.size = self.size}];
-    CGContextSetFillColorWithColor(context, color.CGColor);
-    for (NSValue *value in rects) {
-        CGContextFillRect(context, value.CGRectValue);
+    if (@available(iOS 17.0, *)) {
+        UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+        format.scale = self.scale;
+        format.opaque = self.ll_isOpaque;
+        UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:self.size format:format];
+        
+        return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+            CGContextRef context = UIGraphicsGetCurrentContext();
+            [self drawInRect:(CGRect){.size = self.size}];
+            CGContextSetFillColorWithColor(context, color.CGColor);
+            for (NSValue *value in rects) {
+                CGContextFillRect(context, value.CGRectValue);
+            }
+        }];
+    } else {
+        UIGraphicsBeginImageContextWithOptions(self.size, self.ll_isOpaque, self.scale);
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        [self drawInRect:(CGRect){.size = self.size}];
+        CGContextSetFillColorWithColor(context, color.CGColor);
+        for (NSValue *value in rects) {
+            CGContextFillRect(context, value.CGRectValue);
+        }
+        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return image;
     }
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
 }
 
 
@@ -385,6 +412,27 @@ FOUNDATION_STATIC_INLINE BOOL colorEqualColor(LLColor color1, LLColor color2) {
         }
     }
     return rect;
+}
+
+
++ (nullable UIImage *)ll_snapshotImageForAView:(UIView *)aView {
+    UIImage *snapshotImage;
+    
+    if (@available(iOS 17.0, *)) {
+        UIGraphicsImageRendererFormat *format = [[UIGraphicsImageRendererFormat alloc] init];
+        format.opaque = aView.isOpaque;
+        UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:aView.bounds.size format:format];
+        snapshotImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+            [aView drawViewHierarchyInRect:aView.bounds afterScreenUpdates:YES];
+        }];
+    } else {
+        UIGraphicsBeginImageContextWithOptions(aView.bounds.size, aView.isOpaque, UIScreen.mainScreen.scale);
+        [aView drawViewHierarchyInRect:aView.bounds afterScreenUpdates:YES];
+        snapshotImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    
+    return snapshotImage;
 }
 
 @end
