@@ -1,6 +1,6 @@
 LLDynamicLaunchScreen
 ==============
-[![CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-brightgreen)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.8-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-iOS-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/internetWei/LLDynamicLaunchScreen/blob/master/LICENSE)
+[![CI](https://github.com/internetWei/LLDynamicLaunchScreen/workflows/LLDynamicLaunchScreen%20CI/badge.svg)](https://github.com/internetWei/LLDynamicLaunchScreen/actions)&nbsp;&nbsp; [![Carthage](https://img.shields.io/badge/Carthage-compatible-brightgreen)](https://github.com/Carthage/Carthage)&nbsp; &nbsp;[![CocoaPods](https://img.shields.io/badge/pod-1.0.8-blue)](http://cocoapods.org/pods/LLDynamicLaunchScreen)&nbsp;&nbsp; [![Platform](https://img.shields.io/badge/platform-iOS-blue)](https://www.apple.com/nl/ios)&nbsp;&nbsp; [![License MIT](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://gitee.com/internetWei/lldynamic-launch-screen/blob/master/LICENSE)
 
 __LLDynamicLaunchScreen__ 是1个可以让你不用更新APP并修改iPhone上的各种启动图；它还可以自动修复启动图的各种显示异常。
 
@@ -57,7 +57,7 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 版本限制
 ==============
 
-如果你的项目使用的是 `LaunchScreen` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你在低于iOS11.0的版本上使用并遇到了问题，请提交 [issues](https://github.com/internetWei/LLDynamicLaunchScreen/issues/new)。
+如果你的项目使用的是 `LaunchScreen` 而非 `LaunchImage`，理论上没有最低版本限制；不过我只在iOS11.0及以上系统使用并测试过，如果你在低于iOS11.0的版本上使用并遇到了问题，请提交 [issues](https://gitee.com/internetWei/lldynamic-launch-screen/issues/new)。
 
 注意事项
 ==============
@@ -73,7 +73,7 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 支持
 ==============
 
-如果你有任何更好的意见，请提交 [issue](https://github.com/internetWei/LLDynamicLaunchScreen/issues/new)。
+如果你有任何更好的意见，请提交 [issue](https://gitee.com/internetWei/lldynamic-launch-screen/issues/new)。
 
 如需支持，请发送电子邮件至 [internetwei@foxmail.com](internetwei@foxmail.com)。
 
@@ -86,4 +86,4 @@ LLDynamicLaunchScreen.replaceLaunch(replaceImage, type: .verticalLight, complete
 许可证
 ==============
 
-__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 [LICENSE](https://raw.githubusercontent.com/internetWei/LLDynamicLaunchScreen/master/LICENSE)。
+__LLDynamicLaunchScreen__ 使用 MIT 许可证，详情见 [LICENSE](https://gitee.com/internetWei/lldynamic-launch-screen/raw/master/LICENSE)。
