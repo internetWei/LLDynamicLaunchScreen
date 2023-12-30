@@ -430,47 +430,6 @@ static BOOL (^_migrationHandler)(LLLaunchImageType, UIImage * _Nonnull);
 }
 
 
-#pragma mark - 以下方法即将废弃。
-+ (void)setHasDarkImageBlock:(BOOL (^)(UIImage * _Nonnull))hasDarkImageBlock {}
-+ (BOOL (^)(UIImage * _Nonnull))hasDarkImageBlock { return nil; }
-
-
-+ (void)setLaunchImageBackupPath:(NSString *)launchImageBackupPath {
-    if (![launchImageBackupPath isKindOfClass:NSString.class]) { return; }
-    [NSFileManager.defaultManager removeItemAtPath:launchImageBackupPath error:nil];
-}
-+ (NSString *)launchImageBackupPath { return nil; }
-
-
-+ (nullable UIImage *)launchImageFromType:(LLLaunchImageType)launchImageType {
-    return [self getLaunchImageWithType:launchImageType];
-}
-
-
-+ (BOOL)replaceLaunchImage:(nullable UIImage *)replaceImage
-           launchImageType:(LLLaunchImageType)launchImageType
-        compressionQuality:(CGFloat)quality
-                validation:(BOOL (^ _Nullable) (UIImage *originalImage, UIImage *replaceImage))validationBlock {
-    return ([self replaceLaunchImage:replaceImage type:launchImageType validation:validationBlock] == nil);
-}
-
-
-+ (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage {
-    [self replaceLaunchImage:verticalImage type:LLLaunchImageTypeVerticalLight validation:nil];
-    if (@available(iOS 13.0, *)) {
-        [self replaceLaunchImage:verticalImage type:LLLaunchImageTypeVerticalDark validation:nil];
-    }
-}
-
-
-+ (void)replaceHorizontalLaunchImage:(nullable UIImage *)horizontalImage {
-    [self replaceLaunchImage:horizontalImage type:LLLaunchImageTypeHorizontalLight validation:nil];
-    if (@available(iOS 13.0, *)) {
-        [self replaceLaunchImage:horizontalImage type:LLLaunchImageTypeHorizontalDark validation:nil];
-    }
-}
-
-
 /// 兼容老版本。
 + (NSInteger)LLGetTypeWithName:(NSString *)name {
     if ([name isEqualToString:@"LLLaunchImageTypeVerticalLight"]) { return LLLaunchImageTypeVerticalLight; }

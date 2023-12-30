@@ -107,28 +107,6 @@ typedef NS_ENUM(NSInteger, LLLaunchImageType) {
 /// 该方法可以在子线程调用。
 + (void)restoreAsBefore;
 
-
-#pragma mark - 以下方法即将废弃，请尽快替换。
-@property (nonatomic, class, nullable) BOOL (^hasDarkImageBlock) (UIImage *image) DEPRECATED_MSG_ATTRIBUTE("框架优化了识别深色图片的逻辑，不再需要开发者判断，即使你实现了它，框架也会忽略它，该属性将在2023年12月30日更新并删除!!!");
-
-
-@property (nonatomic, class, null_resettable) NSString *launchImageBackupPath DEPRECATED_MSG_ATTRIBUTE("为了提高框架稳定性和API整洁度，从现在开始，框架内部会自动管理启动图的备份，你应该停止使用该属性，该属性将在2023年12月30日更新并删除!!!");
-
-
-+ (nullable UIImage *)launchImageFromType:(LLLaunchImageType)launchImageType DEPRECATED_MSG_ATTRIBUTE("请使用 `getLaunchImageWithType:` 方法替换，该方法将在2023年12月30日更新并删除!!!");
-
-
-+ (BOOL)replaceLaunchImage:(nullable UIImage *)replaceImage
-           launchImageType:(LLLaunchImageType)launchImageType
-        compressionQuality:(CGFloat)quality
-                validation:(BOOL (^ _Nullable) (UIImage *originalImage, UIImage *replaceImage))validationBlock DEPRECATED_MSG_ATTRIBUTE("请使用 `replaceLaunchImage:type:validation:` 方法替换，该方法将在2023年12月30日更新并删除!!!");
-
-
-+ (void)replaceVerticalLaunchImage:(nullable UIImage *)verticalImage DEPRECATED_MSG_ATTRIBUTE("请使用 `replaceLaunchImage:type:validation:` 方法替换，该方法将在2023年12月30日更新并删除!!!");
-
-
-+ (void)replaceHorizontalLaunchImage:(nullable UIImage *)horizontalImage DEPRECATED_MSG_ATTRIBUTE("请使用 `replaceLaunchImage:type:validation:` 方法替换，该方法将在2023年12月30日更新并删除!!!");
-
 @end
 
 
