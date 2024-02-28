@@ -300,7 +300,11 @@ FOUNDATION_STATIC_INLINE BOOL colorEqualColor(LLColor color1, LLColor color2) {
     CGContextRelease(context);
     
     NSInteger byteIndex = (bytesPerRow * point.y) + (point.x * bytesPerPixel);
-    
+    if (byteIndex > height*width*4) {
+        //ipad上异常
+        free(rawData);
+        return [UIColor whiteColor];
+    }
     CGFloat red = (rawData[byteIndex] * 1.f) / 255.f;
     CGFloat green = (rawData[byteIndex + 1] * 1.f) / 255.f;
     CGFloat blue = (rawData[byteIndex + 2] * 1.f) / 255.f;
