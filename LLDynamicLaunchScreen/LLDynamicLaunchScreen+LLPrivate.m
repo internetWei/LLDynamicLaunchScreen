@@ -572,12 +572,20 @@ FOUNDATION_STATIC_INLINE CGFloat colorDistanceBetweenColor(UIColor *color1, UICo
 
 
 + (nullable UIViewController *)ll_getLaunchScreenViewController {
-    NSString *launchStoryboardName = [self ll_getAPPInfoForKey:@"UILaunchStoryboardName"];
-    launchStoryboardName = [launchStoryboardName stringByDeletingPathExtension];
-    if (launchStoryboardName == nil) { return nil; }
-    
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:launchStoryboardName bundle:nil];
-    return [storyboard instantiateInitialViewController];
+    // this class is not key value coding-compliant for the key sceneViewController
+    //添加异常处理
+    @try {
+        NSString *launchStoryboardName = [self ll_getAPPInfoForKey:@"UILaunchStoryboardName"];
+        launchStoryboardName = [launchStoryboardName stringByDeletingPathExtension];
+        if (launchStoryboardName == nil) { return nil; }
+        
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:launchStoryboardName bundle:nil];
+        return [storyboard instantiateInitialViewController];
+    } @catch (NSException *exception) {
+        return nil;
+    } @finally {
+        
+    }
 }
 
 
