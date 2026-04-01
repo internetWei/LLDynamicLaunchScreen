@@ -277,7 +277,7 @@ static BOOL (^_migrationHandler)(LLLaunchImageType, UIImage * _Nonnull);
     if (NSProcessInfo.processInfo.environment[@"XCTestBundlePath"]) { return; }
 #endif
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         [self ll_checkLaunchImage];
     });
     
